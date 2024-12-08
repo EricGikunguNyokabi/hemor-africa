@@ -1,0 +1,39 @@
+
+.blinking-container {
+    overflow: hidden;
+    width: 100%;
+    text-align: center;
+}
+
+.blinking-text {
+    animation: blinkFade 3s infinite;
+}
+
+@keyframes blinkFade {
+    0%, 100% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+}
+
+.hemor-bg{
+  background: linear-gradient(rgba(17, 102, 158, 0.6),rgba(17, 102, 158,.9));
+}
+
+.product-image {
+  min-height: 300px;;
+  max-height: 300px; /* Set your desired minimum height */
+  object-fit: cover; /* Ensures the image covers the area without distortion */
+}
+
+.card-img-top:hover {
+  transform: scale(1.05);
+  transition: 0.5s ;
+}
+
+
+.margin{
+  color: aliceblue;
+}

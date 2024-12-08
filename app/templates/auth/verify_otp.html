@@ -1,0 +1,27 @@
+<!-- /app/templates/auth/verify_otp.html -->
+{% extends "base.html" %}
+
+{% block title %}Verify OTP{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="text-center mt-5">Verify OTP</h2>
+    <form method="POST" action="{{ url_for('auth.verify_otp') }}" class="mt-4">
+        {{ form.hidden_tag() }}
+
+        <!-- OTP Field -->
+        <div class="form-group">
+            <label for="otp">{{ form.otp.label }}</label>
+            {{ form.otp(class="form-control", id="otp", placeholder="Enter your OTP") }}
+            {% for error in form.otp.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </div>
+
+        <!-- Submit Button -->
+        <div class="form-group text-center mt-3">
+            <button type="submit" class="btn btn-secondary">{{ form.submit() }}</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,66 @@
+<!-- /app/templates/auth/login.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2 class="text-center mt-5">Login to Your Account</h2>
+    
+    <div class="text">
+        {% if get_flashed_messages() %}
+        <ul class="list-unstyled">
+            {% for message in get_flashed_messages() %}
+                <li class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    </div>
+
+    <form method="POST" class="mt-4">
+        {{ form.hidden_tag() }}
+
+        <!-- Email Field -->
+        <div class="form-group">
+            <label for="email">Email</label>
+            {{ form.email(class="form-control", id="email", placeholder="Enter your email") }}
+            {% if form.email.errors %}
+                <div class="text-danger">{{ form.email.errors[0] }}</div>
+            {% endif %}
+        </div>
+        
+        <!-- Password Field -->
+        <div class="form-group">
+            <label for="password">Password</label>
+            {{ form.password(class="form-control", id="password", placeholder="Enter your password") }}
+            {% if form.password.errors %}
+                <div class="text-danger">{{ form.password.errors[0] }}</div>
+            {% endif %}
+        </div>
+        
+        <!-- Submit Button -->
+        <div class="form-group text-center mt-3">
+            {{ form.submit(class="btn btn-info w-50") }}
+        </div>
+        
+        <!-- Additional Links -->
+        <div class="form-group text-center mt-3">
+            <p>Don't have an account? <a href="{{ url_for('auth.register') }}">Register here</a></p>
+            <p><a href="{{ url_for('auth.request_otp') }}" class="text-muted">Forgot Password?</a></p>
+        </div>
+    </form>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    const alert = document.getElementById('myAlert');
+    if (alert) {
+        alert.classList.add('show'); // Show the alert
+        setTimeout(() => {
+            alert.classList.remove('show'); // Fade out after 3 seconds
+        }, 3000);
+    }
+});
+</script>
+{% endblock %}
