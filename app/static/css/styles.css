@@ -1,4 +1,3 @@
-
 .blinking-container {
     overflow: hidden;
     width: 100%;
@@ -19,7 +18,13 @@
 }
 
 .hemor-bg{
-  background: linear-gradient(rgba(17, 102, 158, 0.6),rgba(17, 102, 158,.9));
+  background: linear-gradient(rgba(165, 206, 233, 0.6),rgba(17, 102, 158,.9));
+  transition: background-color 0.3s ease-in-out;
+}
+
+/* Opaque background for the second row when it becomes sticky */
+.hemor-bg.sticky {
+  background-color: rgba(52, 58, 64, 1); /* Opaque dark background */
 }
 
 .product-image {
@@ -29,11 +34,24 @@
 }
 
 .card-img-top:hover {
-  transform: scale(1.05);
+  transform: scale(1.03);
   transition: 0.5s ;
 }
 
 
 .margin{
   color: aliceblue;
+}
+
+/* Make second row (Logo and Company Name) sticky */
+
+
+/* Make third row (Navigation Links) sticky */
+.hemor-nav-r-2  {
+  position: sticky;
+  top: 1;
+  /* top: 60px; Adjust this value to prevent overlapping with the logo row */
+  z-index: 1; 
+  /* background-color: #f8f9fa; Background color for the navigation bar */
+  /* box-shadow: 0 4px 2px -2px gray; Optional: adds shadow for a floating effect */
 }

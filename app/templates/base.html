@@ -1,151 +1,192 @@
 <!doctype html>
 <html lang="en">
 <head>
-   <meta charset="UTF-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>{% block title %} {{ company_name }} {% endblock %}</title>
-   <!-- Google Font -->
-   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&display=swap" rel="stylesheet">
-   <!-- Bootstrap CSS -->
-   <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
-   <!-- Custom Styles -->
-   <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-   <!-- Font Awesome -->
-   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Meta Tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{{ company_name }}: Event management (Public Address, MCEE, DJ services), E-commerce and branding services in Kenya. Call us {{ mobile_number_1 }}">
+    <meta name="author" content="Hemor Afriqa">
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph Meta Tags for better search visibility -->
+    <meta property="og:title" content="{{ company_name }} - Event Management, E-Commerce, and Branding">
+    <meta property="og:description" content="Explore event management services, e-commerce, and fast branding services like t-shirt printing and custom products.">
+    <meta property="og:image" content="https://hemorafrica.com/static/images/logo.png" /> 
+    <meta property="og:url" content="https://hemorafriqa.com">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+     <!-- Links for Google Fonts -->
+     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&display=swap" rel="stylesheet">
+
+     <!-- Bootstrap and other links -->
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet">
+     <link href="https://cdn.jsdelivr.net/npm/font-awesome@5.15.4/css/all.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+
+    <!-- Custom Title-->
+    <title>{% block title %} {{ company_name }} {% endblock %}</title>
+    <!-- Title Icon -->
+    <link rel="icon" href="{{ url_for('static', filename='images/logo-hemor-africa.jpeg') }}" type="image/png">
+    
+
+    <style>
+        /* Add your custom styles here */
+        .header-top {
+            background-color: rgba(19, 63, 3, 0.9);
+            color: white;
+        }
+        .header-nav {
+            background-color: rgba(19, 63, 3, 0.4);
+            color: white;
+        }
+        .hemor-nav-r-2 {
+            position: sticky;
+            top: 0;
+            z-index: 1;   
+        }
+        .hemor-nav-r-3 {
+            position: sticky;
+            top: 0;
+            z-index: 1;   
+        }
+        footer {
+            background-color: rgba(19, 63, 3, 0.6);
+        }
+    </style>
 </head>
+
 <body>
-   <!-- Top Slim Row: WhatsApp Icon and Contact -->
-   <div class="py-1" style="background-color: rgba(13, 29, 7, 0.5);">
-       <div class="container d-flex justify-content-between align-items-center text-light">
-           <span><i class="fab fa-whatsapp"></i> WhatsApp: <a href="https://wa.me/{{ mobile_number_1 }}" class="text-light"> {{ mobile_number_1 }}</a></span>
-           <div>
-            
-            <div class="blinking-container">
-                <span class="blinking-text">Customer Preference and Creativity is Our Calling</span>
+    <!-- Top Slim Row: WhatsApp Icon and Contact -->
+    <div class="py-1 header-top">
+        <div class="container-fluid d-flex justify-content-between align-items-center text-light">
+            <span><i class="fab fa-whatsapp"></i> WhatsApp: <a href="https://wa.me/{{ mobile_number_1 }}" class="text-light"> {{ mobile_number_1 }}</a></span>
+            <div>
+                <!-- <div class="blinking-container">
+                    <span class="blinking-text">Customer Preference and Creativity is Our Calling</span>
+                </div> -->
             </div>
-
-           </div>
-           <span>Email: <a href="mailto:{{ company_mail }}" class="text-light"> {{ company_mail }} </a></span>
-       </div>
-   </div>
-
-   <!-- Second Row: Logo and Company Name -->
-   <div class="hemor-bg py-2">
-       <div class="container d-flex justify-content-between align-items-center text-light">
-           <div class="d-flex align-items-center">
-               <img class="rounded-3" src="{{ url_for('static', filename='images/logo-hemor-africa.jpeg') }}" alt="Logo" style="width: 50px; height: 50px; margin-right: 10px;">
-               <h1 class="h1 m-0" style="font-family: 'Caveat', cursive; font-weight: 900;">{{ company_name }}</h1>
-           </div>
-           
-       </div>
-   </div>
-
-   <!-- Third Row: Navigation Links -->
-   <div class="bg-light py-2">
-        <div class="container">
-            <nav class="d-flex justify-content-center flex-wrap">
-                <a class="nav-link text-dark px-2" href="#">Home</a>
-                <a class="nav-link text-dark px-2" href="#">Event Management</a>
-                <a class="nav-link text-dark px-2" href="#">Branded Products</a>
-                <a class="nav-link text-dark px-2" href="#">About Us</a>
-                <a class="nav-link text-dark px-2" href="#">Contact</a>
-            </nav>
+            <!-- <span>Email: <a href="mailto:{{ company_mail }}" class="text-light"> {#{ company_mail }#} </a></span> -->
         </div>
     </div>
 
-
-   <!-- Main Content -->
-   <div class="container my-4" style="min-height: 65vh;">
-       {% block content %}
-       {% endblock %}
-   </div>
-
-   <!-- Footer -->
-   <footer class="hemor-bg text-light py-4">
-    <div class="container">
-        <div class="row">
-            <!-- Event Organization and E-commerce Column -->
-            <div class="col-md-4">
-                <h5>Our Services</h5>
-                <div class="row">
-                    <!-- Event Organization -->
-                    <div class="col-6">
-                        <h6>Event Organization</h6>
-                        <ul class="list-unstyled">
-                            <li>Tent Rentals</li>
-                            <li>Chair Rentals</li>
-                            <li>PA System Setup</li>
-                            <li>MCEE Services</li>
-                            <li>DJ Services</li>
-                        </ul>
-                    </div>
-                    <!-- E-commerce -->
-                    <div class="col-6">
-                        <h6>E-commerce</h6>
-                        <ul class="list-unstyled">
-                            <li>Branded Shirts</li>
-                            <li>Unbranded T-Shirts</li>
-                            <li>Sweaters and Jerseys</li>
-                            <li>Books and Stationery</li>
-                            <li>SkinFeel Thermal Bottles</li>
-                        </ul>
-                    </div>
+    <!-- Second Row: Logo and Company Name -->
+    <div class="hemor-nav-r-2 sticky">
+        <!-- Mini: Second Row - 1: Logo and Company Name -->
+        <div class="hemor-bg py-2">
+            <div class="container-fluid d-flex justify-content-between align-items-center text-light">
+                <div class="d-flex align-items-center">
+                    <img class="rounded-3" src="{{ url_for('static', filename='images/logo-hemor-africa.jpeg') }}" alt="Logo" style="width: 50px; height: 50px; margin-right: 10px;">
+                    <h1 class="h1 m-0" style="font-family: 'Caveat', cursive; font-weight: 900;">{{ company_name }}</h1>
                 </div>
             </div>
+        </div>
 
-            <!-- Contact Information Column -->
-            <div class="col-md-4">
-                <h5>Contact Us</h5>
-                <ul class="list-unstyled">
-                    <li><i class="fas fa-phone"></i> {{ mobile_number_1 }} </li>
-                    <li><i class="fas fa-phone"></i> {{ mobile_number_2 }} </li>
-                    <li><i class="fas fa-envelope"></i> <a href="mailto:{{ company_mail }}" class="text-light"> {{ company_mail }} </a></li>
-                </ul>
-            </div>
-
-            <!-- Social Media Column -->
-            <div class="col-md-4">
-                <h5>Follow Us</h5>
-                <ul class="list-unstyled">
-                    <li>
-                        <a href="https://www.facebook.com/{{ facebook }}" class="text-light">
-                            <i class="fab fa-facebook"></i> Facebook
-                        </a>
-                    </li>
-                    <li>
-                        <a href="https://www.instagram.com/{{ instagram }}" class="text-light">
-                            <i class="fab fa-instagram"></i> Instagram
-                        </a>
-                    </li>
-                    <li>
-                        <a href="https://wa.me/{{ mobile_number_1 }}" class="text-light">
-                            <i class="fab fa-whatsapp"></i> WhatsApp
-                        </a>
-                    </li>
-                </ul>
+        <!-- Mini: Second Row - 2: Navigation Links -->
+        <div class="hemor-nav-r-2 b py-2">
+            <div class="container-fluid">
+                <nav class="d-flex justify-content-center flex-wrap">
+                    <a class="nav-link text-dark px-2" href="{{ url_for('main.home') }}">Home</a>
+                    <a class="nav-link text-dark px-2" href="#">Event Management</a>
+                    <a class="nav-link text-dark px-2" href="#">Branded Products</a>
+                    <a class="nav-link text-dark px-2" href="#">About Us</a>
+                    <a class="nav-link text-dark px-2" href="#">Contact</a>
+                </nav>
             </div>
         </div>
     </div>
 
-</footer>
-
-<!-- Bottom Slim Row: Copyright -->
-<div class="bg-success py-1">
-    <div class="container d-flex justify-content-between align-items-center text-light">
-
-        &copy {{ company_name }}. All rights reserved.
-        <span><i class="fab fa-whatsapp"></i> WhatsApp: <a href="https://wa.me/{{ mobile_number_1 }}" class="text-light">{{ mobile_number_1 }}</a></span>
-        <div>
-         
-       
-
-        </div>
-        <span>Email: <a href="mailto:{{ company_mail }}" class="text-light">{{ company_mail }}</a></span>
+    <!-- Main Content -->
+    <div class="container-fluid my-4" style="min-height: 65vh;">
+        {% block content %}
+        {% endblock %}
     </div>
-</div>
 
+    <!-- Footer -->
+    <footer class="container-fluid hemor-bg text-light py-4" style="background: linear-gradient(rgba(165, 206, 233, 0.8),rgba(17, 102, 158,.9));">
+        <div class="container">
+            <div class="row">
+                <!-- Event Organization and E-commerce Column -->
+                <div class="col-md-6 col-12 mb-3">
+                    <div class="row">
+                        <div class="col-6">
+                            <h6>Event Management</h6>
+                            <ul class="list-unstyled">
+                                <li>Tent Rentals</li>
+                                <li>Chair Rentals</li>
+                                <li>PA System Setup</li>
+                                <li>MCEE Services</li>
+                                <li>DJ Services</li>
+                            </ul>
+                        </div>
+                        <div class="col-6">
+                            <h6>E-commerce</h6>
+                            <ul class="list-unstyled">
+                                <li>Branded Shirts</li>
+                                <li>Unbranded T-Shirts</li>
+                                <li>Sweaters and Jerseys</li>
+                                <li>Books and Stationery</li>
+                                <li>SkinFeel Thermal Bottles</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
 
-   <!-- Bootstrap Bundle JS -->
-   <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+                <!-- Contact Information Column -->
+                <div class="col-md-3 col-12 mb-3">
+                    <h5>Contact Us</h5>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-phone"></i> {{ mobile_number_1 }} </li>
+                        <li><i class="fas fa-phone"></i> {{ mobile_number_2 }} </li>
+                        <li><i class="fas fa-envelope"></i> <a href="mailto:{{ company_mail }}" class="text-light"> {{ company_mail }} </a></li>
+                    </ul>
+                </div>
+
+                <!-- Social Media Column -->
+                <div class="col-md-3 col-12 mb-3">
+                    <h5>Follow Us</h5>
+                    <ul class="list-unstyled">
+                        <li>
+                            <a href="https://www.facebook.com/{{ facebook }}" class="text-light">
+                                <i class="fab fa-facebook"></i> Facebook
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.instagram.com/{{ instagram }}" class="text-light">
+                                <i class="fab fa-instagram"></i> Instagram
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://wa.me/{{ mobile_number_1 }}" class="text-light">
+                                <i class="fab fa-whatsapp"></i> WhatsApp
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bottom Slim Row: Copyright -->
+    <div class="container-fluid">
+        <div class="row row-cols-3 row-cols-md-3 bg-secondary product-grid">
+            <div class="col">
+                &copy {{ company_name }}.
+            </div>
+            <div class="col">
+                <span><i class="fab fa-whatsapp"></i> WhatsApp: <a href="https://wa.me/{{ mobile_number_1 }}" class="text-light">{{ mobile_number_1 }}</a></span>
+            </div>
+            <div class="col">
+                <span>Email: <a href="mailto:{{ company_mail }}" class="text-light">{{ company_mail }}</a></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap Bundle JS -->
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
 </body>
 </html>
+    </div>

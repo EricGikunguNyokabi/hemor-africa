@@ -1,0 +1,83 @@
+<!-- templates/auth/employee/register.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2 class="text-center mt-5">Register Your Account</h2>
+
+    <!-- Display Flash Messages -->
+    <div class="text">
+        {% if get_flashed_messages() %}
+            <ul class="list-unstyled">
+                {% for message, category in get_flashed_messages(with_categories=true) %}
+                    <li class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+
+    <!-- Registration Form -->
+    <form method="POST" class="mt-4">
+        {{ form.hidden_tag() }}
+
+        <div class="form-group">
+            <label for="first_name">First Name</label>
+            {{ form.first_name(class="form-control", placeholder="Enter your first name") }}
+            {% if form.first_name.errors %}
+                <div class="text-danger">{{ form.first_name.errors[0] }}</div>
+            {% endif %}
+        </div>
+        
+        <div class="form-group">
+            <label for="last_name">Last Name</label>
+            {{ form.last_name(class="form-control", placeholder="Enter your last name") }}
+            {% if form.last_name.errors %}
+                <div class="text-danger">{{ form.last_name.errors[0] }}</div>
+            {% endif %}
+        </div>
+        
+        <div class="form-group">
+            <label for="email">Email</label>
+            {{ form.email(class="form-control", placeholder="Enter your email") }}
+            {% if form.email.errors %}
+                <div class="text-danger">{{ form.email.errors[0] }}</div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="mobile_no">Mobile Number</label>
+            {{ form.mobile_no(class="form-control", placeholder="Enter your mobile number") }}
+            {% if form.mobile_no.errors %}
+                <div class="text-danger">{{ form.mobile_no.errors[0] }}</div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password</label>
+            {{ form.password(class="form-control", placeholder="Enter your password") }}
+            {% if form.password.errors %}
+                <div class="text-danger">{{ form.password.errors[0] }}</div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="confirm_password">Confirm Password</label>
+            {{ form.confirm_password(class="form-control", placeholder="Confirm your password") }}
+            {% if form.confirm_password.errors %}
+                <div class="text-danger">{{ form.confirm_password.errors[0] }}</div>
+            {% endif %}
+        </div>
+
+        <div class="form-group text-center mt-3">
+            {{ form.submit(class="btn btn-primary w-50") }}
+        </div>
+
+        <div class="form-group text-center mt-3">
+            <p>Already have an account? <a href="{{ url_for('auth.login') }}">Login here</a></p>
+        </div>
+    </form>
+</div>
+{% endblock %}

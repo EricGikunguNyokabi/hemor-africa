@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Category - {{ company_name }}{% endblock %}
+
+{% block content %}
+
+{% if user %}
+    <p>You are not an employee.</p>
+{% endif %}
+
+{% if employee %}
+    <!-- Category Listing -->
+    <div class="container my-4">
+        <h2 class="text-center">Featured Categories</h2>
+        <div class="row row-cols-2 row-cols-md-4 g-4">
+            {% if categories %}
+                {% for category in categories %}
+                <div class="col">
+                    <div class="card h-100 shadow-sm">
+                        <!-- Assuming category has an image, update accordingly -->
+                        <img src="{{ url_for('static', filename=category.category_image.split('static/', 1)[-1]) }}" class="card-img-top w-100 category-image" alt="{{ category.category_name }}">
+                        <div class="card-body">
+                            <h5 class="card-title" style="font-family: 'Concert One';">{{ category.category_name | capitalize }}</h5>
+                            <div class="d-flex justify-content-between">
+                                <p class="card-text" style="font-family: kalam;"><strong>Price: Ksh {{ "{:,.2f}".format(category.category_price) }}</strong></p>
+                                <a href="{#{ url_for('category.single_category_detail', category_id=category.category_id) }#}" class="">View Details</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="col text-center">
+                    <p>No categories available at the moment. Please check back later!</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endif %}
+
+{% endblock %}

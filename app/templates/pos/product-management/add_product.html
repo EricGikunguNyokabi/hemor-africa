@@ -1,59 +1,63 @@
-{% extends 'base.html' %}
-
-
-
-{% block title %}Add Product{% endblock %}
+{% extends "base.html" %}
 
 {% block content %}
+<div class="container mt-5">
+    <h2>Add New Product</h2>
+    <form method="POST" enctype="multipart/form-data">
+        <div class="text">
 
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card mt-5 mb-5">
-                <div class="card-header text-center"><h4>Product Detail Upload</h4></div>
-                <div class="card-body">
 
-                        <form action="{{ url_for('ecommerce.add_product_details') }}" method="POST" enctype="multipart/form-data">
-                            {% if message or error %}
-                                {% if message %}
-                                    <div class="alert alert-success" role="alert">
-                                        {{ message }}
-                                    </div>
-                                {% else %}
-                                    <div class="alert alert-danger" role="alert">
-                                        {{ error }}
-                                    </div>
-                                {% endif %}
-                            {% endif %}
-                            <div class="form-group">
-                                <label for="product_category">Category</label>
-                                <input type="text" name="product_category" id="product_category" class="form-control" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="product_name">Product Name</label>
-                                <input type="text" name="product_name" id="product_name" class="form-control" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="product_description">Description</label>
-                                <textarea name="product_description" id="product_description" class="form-control"></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label for="product_cost">Cost</label>
-                                <input type="number" step="0.01" name="product_cost" id="product_cost" class="form-control" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="product_image_path">Image</label>
-                                <input type="file" name="product_image_path" id="product_image_path" class="form-control" required>
-                            </div>
-                            <button type="submit" class="btn btn-primary mt-3">Upload Product</button>
-                        </form>
-
-                        
-
-                </div>
-            </div>
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+            {{ form.product_name.label }}<br>
+            {{ form.product_name(class="form-control") }}
+            {% for error in form.product_name.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
         </div>
-    </div>
+        <div class="form-group">
+            {{ form.product_description.label }}<br>
+            {{ form.product_description(class="form-control") }}
+            {% for error in form.product_description.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+        <div class="form-group">
+            {{ form.cost_price.label }}<br>
+            {{ form.cost_price(class="form-control") }}
+            {% for error in form.cost_price.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+        <div class="form-group">
+            {{ form.selling_price.label }}<br>
+            {{ form.selling_price(class="form-control") }}
+            {% for error in form.selling_price.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+        <div class="form-group">
+            {{ form.discount.label }}<br>
+            {{ form.discount(class="form-control") }}
+            {% for error in form.discount.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+        <div class="form-group">
+            {{ form.stock_quantity.label }}<br>
+            {{ form.stock_quantity(class="form-control") }}
+            {% for error in form.stock_quantity.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+        <div class="form-group">
+            {{ form.product_image.label }}<br>
+            {{ form.product_image(class="form-control") }}
+            {% for error in form.product_image.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+        <button type="submit" class="btn btn-primary mt-3">{{ form.submit.label }}</button>
+    </form>
 </div>
-
 {% endblock %}
