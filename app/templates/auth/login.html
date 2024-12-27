@@ -5,7 +5,6 @@
     <h2 class="text-center mt-5">Login to Your Account</h2>
     
     <div class="text">
-        {% if get_flashed_messages() %}
         <ul class="list-unstyled">
             {% for message, category in get_flashed_messages(with_categories=true) %}
                 <li class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
@@ -14,10 +13,13 @@
                 </li>
             {% endfor %}
         </ul>
-        {% endif %}
+        
     </div>
 
     <form method="POST" class="mt-4">
+        <!-- CSRF Token -->
+        {{ form.hidden_tag() }}
+        
         <!-- Email or Mobile Number Field -->
         <div class="form-group">
             <label for="email_or_mobile">Email or Mobile Number</label>
@@ -29,15 +31,16 @@
             <label for="password">Password</label>
             <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
         </div>
-
+    
         <!-- Submit Button -->
         <div class="form-group text-center mt-3">
             <button type="submit" class="btn btn-primary w-50">Login</button>
         </div>
-
+    
         <div class="form-group text-center mt-3">
             <p>Don't have an account? <a href="{{ url_for('auth.register') }}">Register here</a></p>
         </div>
     </form>
+    
 </div>
 {% endblock %}

@@ -21,6 +21,15 @@
   background: linear-gradient(rgba(165, 206, 233, 0.6),rgba(17, 102, 158,.9));
   transition: background-color 0.3s ease-in-out;
 }
+.hemor-bg-9{
+  background: linear-gradient(rgba(165, 206, 233, 0.6),rgba(17, 102, 158,.9));
+  transition: background-color 0.3s ease-in-out;
+}
+.hemor-bg-8{
+  background: linear-gradient(rgba(165, 206, 233, 0.5),rgba(17, 102, 158,.8));
+  transition: background-color 0.3s ease-in-out;
+}
+
 
 /* Opaque background for the second row when it becomes sticky */
 .hemor-bg.sticky {

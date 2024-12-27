@@ -16,7 +16,7 @@ def home():
 
 # Dashboard route: Fetch and display user and employee data along with products
 @main.route("/dashboard")
-# @login_required
+@login_required
 def dashboard():
     # Since @login_required ensures the user is authenticated, we can directly use current_user
     user = current_user
@@ -27,10 +27,11 @@ def dashboard():
         employee = user
     else:
         # If the user is of type User, you might want to fetch the corresponding employee
-        employee = Employee.query.filter_by(user_id=user.id).first()  # Adjust based on your Employee model
+        # employee = Employee.query.filter_by(user_id=user.id).first()  # Adjust based on your Employee model
 
-    products = Product.query.all()
-    print(f"\nUser  in dashboard: {user}")
-    print(f"\nEmployee in dashboard: {employee}")
+    # products = Product.query.all()
+    # print(f"\nUser  in dashboard: {user}")
+    # print(f"\nEmployee in dashboard: {employee}")
 
-    return render_template("home.html", products=products, user=user, employee=employee)
+    # return render_template("home.html",  user=user, employee=employee)
+        return "dashboard"

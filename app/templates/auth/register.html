@@ -5,47 +5,69 @@
 {% block content %}
 <div class="container">
     <h2 class="text-center mt-5">Create Your Account</h2>
-    <form method="POST" action="{{ url_for('auth.register') }}" class="mt-4">
+    <form method="POST" action="{{ url_for('auth.register') }}" class="mt-4 needs-validation" novalidate>
 
-        <!-- Email Field -->
-        <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email">
-            {% if email_error %}
-                <span style="color: red;">[{{ email_error }}]</span>
-            {% endif %}
-        </div>
+        <!-- CSRF Token -->
+        {{ form.hidden_tag() }}
 
         <!-- Mobile No. Field -->
         <div class="form-group">
-            <label for="mobile_no">Mobile No</label>
-            <input type="text" class="form-control" id="mobile_no" name="mobile_no" placeholder="Enter your mobile number">
+            <label for="mobile_no" class="form-label">Mobile No</label>
+            <input 
+                type="text" 
+                class="form-control {% if mobile_no_error %}is-invalid{% endif %}" 
+                id="mobile_no" 
+                name="mobile_no" 
+                placeholder="Enter your mobile number" 
+                required
+            >
             {% if mobile_no_error %}
-                <span style="color: red;">[{{ mobile_no_error }}]</span>
+                <div class="invalid-feedback">{{ mobile_no_error }}</div>
+            {% else %}
+                <div class="form-text">Include your country code (e.g., +254123456789).</div>
             {% endif %}
         </div>
 
         <!-- Password Field -->
-        <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password">
+        <div class="form-group mt-3">
+            <label for="password" class="form-label">Password</label>
+            <input 
+                type="password" 
+                class="form-control {% if password_error %}is-invalid{% endif %}" 
+                id="password" 
+                name="password" 
+                placeholder="Enter your password" 
+                minlength="8" 
+                required
+            >
             {% if password_error %}
-                <span style="color: red;">[{{ password_error }}]</span>
+                <div class="invalid-feedback">{{ password_error }}</div>
+            {% else %}
+                <div class="form-text">Password must be at least 4 characters long.</div>
             {% endif %}
         </div>
 
         <!-- Confirm Password Field -->
-        <div class="form-group">
-            <label for="confirm_password">Confirm Password</label>
-            <input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="Confirm your password">
+        <div class="form-group mt-3">
+            <label for="confirm_password" class="form-label">Confirm Password</label>
+            <input 
+                type="password" 
+                class="form-control {% if confirm_password_error %}is-invalid{% endif %}" 
+                id="confirm_password" 
+                name="confirm_password" 
+                placeholder="Confirm your password" 
+                required
+            >
             {% if confirm_password_error %}
-                <span style="color: red;">[{{ confirm_password_error }}]</span>
+                <div class="invalid-feedback">{{ confirm_password_error }}</div>
+            {% else %}
+                <div class="form-text">Ensure passwords match.</div>
             {% endif %}
         </div>
 
         <!-- Submit Button -->
-        <div class="form-group text-center mt-3">
-            <button type="submit" class="btn btn-secondary">Register</button>
+        <div class="d-grid mt-4">
+            <button type="submit" class="btn btn-primary">Register</button>
         </div>
 
         <!-- Additional Links -->
@@ -54,4 +76,23 @@
         </div>
     </form>
 </div>
+
+<script>
+    // Bootstrap form validation
+    (function () {
+        'use strict';
+        window.addEventListener('load', function () {
+            const forms = document.getElementsByClassName('needs-validation');
+            Array.prototype.filter.call(forms, function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
+</script>
 {% endblock %}

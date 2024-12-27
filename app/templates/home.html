@@ -1,45 +1,64 @@
 {% extends "base.html" %}
 
-{% block title %}Home - {{ company_name }}{% endblock %}
+{% block title %} 
+    {{ company_name.replace('Afriqa', 'AfriQa') }} | Home 
+{% endblock %}
 
 {% block content %}
+    <div class="container my-5">
+        <h1>Welcome to {{ company_name.replace('Afriqa', 'AfriQa') }}</h1>
 
+        <!-- User/Employee Details -->
+        {% if user %}
+        <div class="alert alert-success">
+            <p><strong>User ID:</strong> {{ user.user_id }}</p>
+            <p><strong>Name:</strong> {{ user.first_name }} {{ user.last_name }}</p>
+        </div>
+        {% endif %}
 
-{% if user %}
-    <p>User ID: {{ user.user_id }}</p>
-    <p>User Name: {{ user.first_name }} {{ user.last_name }}</p>
-{% endif %}
+        {% if employee %}
+        <div class="alert alert-primary">
+            <p><strong>Employee ID:</strong> {{ employee.employee_id }}</p>
+            <p><strong>Name:</strong> {{ employee.first_name }}</p>
+            <p><strong>Logins:</strong> {{ employee.login_count }}</p>
+        </div>
+        {% endif %}
 
-{% if employee %}
-    <p>Employee ID: {{ employee.employee_id }}</p>
-    <p>Employee Name: {{ employee.first_name }}</p>
-    Logged  {{ employee.login_count }}
-{% endif %}
-
-<!-- Products Listing -->
-<div class="container my-4">
-    <h2 class="text-center">Featured Products</h2>
-    <div class="row row-cols-2 row-cols-md-4 g-4">
-        {% if products %}
-            {% for product in products %}
-            <div class="col">
-                <div class="card h-100 shadow-sm">
-                    <img src="{{ url_for('static', filename=product.product_image_path.split('static/', 1)[-1]) }}" class="card-img-top w-100 product-image" alt="{{ product.product_name }}">
-                    <div class="card-body">
-                        <h5 class="card-title" style="font-family: 'Concert One';">{{ product.product_name | capitalize }}</h5>
-                        <div class="d-flex justify-content-between">
-                            <p class="card-text" style="font-family: kalam;"><strong>Price: Ksh {{ "{:,.2f}".format(product.product_cost) }}</strong></p>
-                            <a href="{{ url_for('ecommerce.single_product_detail', product_id=product.product_id) }}" class="">View Details</a>
+        <!-- Products Listing -->
+        <div class="container my-4">
+            <h2 class="text-center">Featured Products</h2>
+            <div class="row row-cols-2 row-cols-md-4 g-4">
+                {% if products %}
+                    {% for product in products %}
+                    <div class="col">
+                        <div class="card h-100 shadow-sm">
+                            <img src="{{ url_for('static', filename=product.product_image_path.split('static/', 1)[-1]) }}" 
+                                 class="card-img-top w-100 product-image" 
+                                 alt="{{ product.product_name }}">
+                            <div class="card-body">
+                                <h5 class="card-title" style="font-family: 'Concert One';">{{ product.product_name | capitalize }}</h5>
+                                <p class="text-muted">{{ product.product_description[:50] }}...</p>
+                                <div class="d-flex justify-content-between">
+                                    <p class="card-text" style="font-family: kalam;">
+                                        <strong>Price: Ksh {{ "{:,.2f}".format(product.product_cost) }}</strong>
+                                    </p>
+                                    <a href="{{ url_for('ecommerce.single_product_detail', product_id=product.product_id) }}" 
+                                       class="btn btn-outline-primary btn-sm">View Details</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="col alert alert-warning text-center" role="alert">
+                        <p>Oops! No products are available now. Check back soon for exciting items!</p>
+
+                        <p>
+                            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Voluptatem ad ducimus, repellendus sapiente molestiae optio, accusamus vel autem laboriosam ab sequi animi, quas laudantium. Ratione quidem nisi quam esse consequuntur, totam quos dolores assumenda itaque impedit soluta, dolorem unde numquam. Alias maiores adipisci saepe dolores eveniet a assumenda necessitatibus facere tempore veniam commodi, doloremque error repellat sint, itaque facilis odit illo. At corporis tenetur repellat sed, cum obcaecati nulla earum rem delectus, maxime excepturi amet! Praesentium, aliquid laboriosam, quasi repudiandae quam molestiae molestias qui inventore consequuntur sapiente est ut asperiores ullam autem quisquam vel reprehenderit. Voluptates ullam voluptatibus deserunt laborum.
+                        </p>
+                    </div>
+                {% endif %}
             </div>
-            {% endfor %}
-        {% else %}
-            <div class="col text-center">
-                <p>No products available at the moment. Please check back later!</p>
-            </div>
-        {% endif %}
+        </div>
     </div>
-</div>
 {% endblock %}

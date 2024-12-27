@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}Page Not Found - {{ company_name }}{% endblock %}
+
+{% block content %}
+<div class="container text-center">
+    <h2 class="mt-5 text-danger">Oops! The page you're looking for does not exist.</h2>
+    <p class="lead">It seems like the page might have been moved or deleted. Please check the URL and try again.</p>
+    <a href="{{ url_for('main.home') }}" class="btn btn-primary mt-3">Go Back to Home</a>
+
+    {% if user %}
+        <div class="mt-4">
+            <h4>User Information</h4>
+            <p>User ID: {{ user.user_id }}</p>
+            <p>User Name: {{ user.first_name }} {{ user.last_name }}</p>
+        </div>
+    {% endif %}
+
+    {% if employee %}
+        <div class="mt-4">
+            <h4>Employee Information</h4>
+            <p>Employee ID: {{ employee.employee_id }}</p>
+            <p>Employee Name: {{ employee.first_name }}</p>
+            <p>Login Count: {{ employee.login_count }}</p>
+        </div>
+    {% endif %}
+
+    <!-- Featured Products Section -->
+    <div class="container my-4">
+        <h2 class="text-center">Featured Products</h2>
+        <div class="row row-cols-2 row-cols-md-4 g-4">
+            {% if products %}
+                {% for product in products %}
+                <div class="col">
+                    <div class="card h-100 shadow-sm">
+                        <img src="{{ url_for('static', filename=product.product_image_path.split('static/', 1)[-1]) }}" class="card-img-top w-100 product-image" alt="{{ product.product_name }}">
+                        <div class="card-body">
+                            <h5 class="card-title" style="font-family: 'Concert One';">{{ product.product_name | capitalize }}</h5>
+                            <div class="d-flex justify-content-between">
+                                <p class="card-text" style="font-family: kalam;"><strong>Price: Ksh {{ "{:,.2f}".format(product.product_cost) }}</strong></p>
+                                <a href="{{ url_for('ecommerce.single_product_detail', product_id=product.product_id) }}" class="">View Details</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="col text-center">
+                    <p>No products available at the moment. Please check back later!</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

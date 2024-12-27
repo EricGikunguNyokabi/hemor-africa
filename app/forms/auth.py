@@ -85,5 +85,5 @@ class LoginForm(FlaskForm):
             )
     submit = SubmitField("Login")
 
-    class Meta:
-        csrf = False  # Disable CSRF protection if needed
+    # class Meta:
+    #     csrf = False  # Disable CSRF protection if needed
