@@ -14,7 +14,9 @@
     <meta property="og:image" content="https://hemorafrica.com/static/images/logo.png" /> 
     <meta property="og:url" content="https://hemorafriqa.com">
 
+    <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet"> -->
 
      <!-- Links for Google Fonts -->
      <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
@@ -23,6 +25,9 @@
      <!-- Bootstrap and other links -->
      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet">
      <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+     
+
 
      <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous"> -->
      <link href="https://cdn.jsdelivr.net/npm/font-awesome@5.15.4/css/all.min.css" rel="stylesheet">
@@ -65,6 +70,12 @@ header .nav-link {
         flex-wrap: nowrap;
         overflow-x: auto;
     }
+}
+
+.scrollable-menu {
+    max-height: 80vh; /* Set a maximum height */
+    overflow-y: auto;  /* Enable vertical scrolling */
+    /* padding-right: ; Optional: Add padding to avoid content touching the scrollbar */
 }
 
 
@@ -161,8 +172,7 @@ header .nav-link {
         
     </header>
     
-    <!-- Sliding Menu -->
-    <!-- Sliding Menu -->
+<!-- Sliding Menu -->
 <div id="slidingMenu" class="sliding-menu">
     <button class="close-menu btn btn-sm btn-dark">&times;</button>
     <div class="menu-content px-4 py-3">
@@ -175,22 +185,15 @@ header .nav-link {
             <span class="brand-name fw-bold ms-3 fs-5 text-dark"> {{ company_name }} </span>
         </div>
 
-
-        
-
         <div class="d-flex justify-content-between align-items-center gap-3">
             {% if user in session %}
-
-                <!-- Display Profile Button if user is logged in -->
                 <a href="{{ url_for('main.dashboard') }}" class="btn btn-outline-info btn-sm flex-fill text-center">
                     <i class="fas fa-user me-2"></i> Profile
                 </a>
                 <a href="{{ url_for('auth.logout') }}" class="btn btn-outline-danger btn-sm flex-fill text-center">
                     <i class="fas fa-sign-out-alt me-2"></i> Logout
                 </a>
-
             {% else %}
-                <!-- Display Login and Register Buttons if user is not logged in -->
                 <a href="{{ url_for('auth.login') }}" class="btn btn-outline-primary btn-sm flex-fill text-center">
                     <i class="fas fa-sign-in-alt me-2"></i> Login
                 </a>
@@ -206,65 +209,78 @@ header .nav-link {
             <i class="fas fa-phone me-2 ms-2"></i> 
                 {{ current_user.mobile_no or (employee.mobile_no if employee is defined else 'N/A') }}
         </div>
-        {% else %}
-
         {% endif %}
-        
-        
 
-        
+        <!-- Scrollable Menu Section -->
+        <div class="scrollable-menu">
+            <!-- Event Management Section -->
+            <div class="menu-section mt-4 mb-4">
+                <h5 class="fs-6 text-dark">
+                    <i class="fas fa-calendar-check"></i> Event Management
+                </h5>
+                <ul class="list-unstyled ps-3">
+                    <li><i class="fas fa-microphone-alt"></i> Public Address System</li>
+                    <li><i class="fas fa-user-tie"></i> MCee</li>
+                    <li><i class="fas fa-campground"></i> Tents</li>
+                    <li><i class="fas fa-chair"></i> Seats</li>
+                </ul>
+            </div>
 
-        <!-- Event Management Section -->
-        <div class="menu-section mt-4 mb-4">
-            <h5 class="fs-6 text-dark">
-                <i class="fas fa-"></i>Event Management
-            </h5>
-            <ul class="list-unstyled ps-3">
-                <li><i class="fas fa-microphone-alt"></i> Public Address System</li>
-                <li><i class="fas fa-user-tie"></i> MCee</li>
-                <li><i class="fas fa-tent"></i> Tent and Seats</li>
-            </ul>
+            <!-- E-Commerce Section -->
+            <div class="menu-section mb-4">
+                <h5 class="fs-6 text-dark">
+                    <i class="fas fa-shopping-cart"></i> E-Commerce 
+                </h5>
+                <ul class="list-unstyled ps-3">
+                    <li><i class="fas fa-tshirt"></i> Custom Brands </li>
+                    <li><i class="fas fa-tshirt"></i> Jerseys </li>
+                    <li><i class="fas fa-sweater"></i> Hoodies </li>
+                    <li><i class="fas fa-tshirt"></i> Casual Wears</li>
+                    <li><i class="fas fa-utensils"></i> Utensils </li>
+                    <li><i class="fas fa-book"></i> Branded Notebooks </li>
+                    <li><i class="fas fa-male"></i> Men’s Wears </li>
+                    <li><i class="fas fa-female"></i> Women’s Wears</li>
+                </ul>
+            </div>
+
+             
+
+            <!-- Corporate Deals Section -->
+            <div class="menu-section mb-4">
+                <h5 class="fs-6 text-dark">
+                    <i class="fas fa-handshake"></i> Corporate Deals
+                </h5>
+                <ul class="list-unstyled ps-3">
+                    <li><i class="fas fa-tshirt"></i> Custom Brand </li>
+                    <li><i class="fas fa-book"></i> Executive Notebooks </li>
+                </ul>
+            </div>
+
+            <!-- Gift Hampers Section -->
+            <div class="menu-section mb-4">
+                <h5 class="fs-6 text-dark">
+                    <i class="fas fa-gift"></i> Gift Hampers
+                </h5>
+                <ul class="list-unstyled ps-3">
+                    <li><i class="fas fa-box"></i> Gift Hampers </li>
+                </ul>
+            </div>
+
+            <!-- About Us Section -->
+            <div class="menu-section mb-4">
+                <h5 class="fs-6 text-dark">
+                    <i class="fas fa-gift"></i> Hemor AfriQa
+                </h5>
+                <ul class="list-unstyled ps-3">
+                    <li><i class="fas fa-box"></i> About Us </li>
+                    <li><i class="fas fa-box"></i> Contact Us </li>
+                </ul>
+            </div>
+
         </div>
-
-        <!-- E-Commerce Section -->
-        <div class="menu-section mb-4">
-            <h5 class="fs-6 text-dark">
-                <i class="fas fa-"></i> E-Commerce Custom Brand
-            </h5>
-            <ul class="list-unstyled ps-3">
-                <li><i class="fas fa-tshirt"></i> Custom Brand </li>
-                <li><i class="fas fa-male"></i> Men’s Wears </li>
-                <li><i class="fas fa-female"></i> Women’s Wears</li>
-                <li><i class="fas fa-tshirt"></i> Casual </li>
-                <li><i class="fas fa-utensils"></i> Utensils </li>
-                <li><i class="fas fa-books"></i> Branded Notebooks </li>
-            </ul>
-        </div>
-
-        <!-- Corporate Deals Section -->
-        <div class="menu-section mb-4">
-            <h5 class="fs-6 text-dark">
-                <i class="fas fa-"></i>Corporate Deals
-            </h5>
-            <ul class="list-unstyled ps-3">
-                <li><i class="fas fa-tshirt"></i> Custom Brand </li>
-                <li><i class="fas fa-books"></i> Executive Notebooks </li>
-            </ul>
-        </div>
-
-        <!-- Gift Humpers Section -->
-        <div class="menu-section mb-4">
-            <h5 class="fs-6 text-dark">
-                <i class="fas fa-"></i>Gift Humpers
-            </h5>
-            <ul class="list-unstyled ps-3">
-                <li><i class="fas fa-tshirt"></i> Gift Humpers </li>
-            </ul>
-        </div>
-
-
     </div>
 </div>
+
 
     
 
