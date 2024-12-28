@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, FloatField, IntegerField, TextAreaField, FileField, SubmitField, SelectField
-from wtforms.validators import DataRequired, Length, Optional
-
+from wtforms.validators import DataRequired, Length, Optional, NumberRange
+from flask_wtf.file import FileField, FileAllowed
 
 class CategoryForm(FlaskForm):
     category_name = StringField("Category Name",
@@ -30,35 +30,121 @@ class CategoryForm(FlaskForm):
 
 
 
-class ProductForm(FlaskForm):
-    # Category Dropdown for selecting product category
-    product_category = SelectField(
-        "Product Category", 
-        coerce=int,  # coerce values to integers
-        validators=[DataRequired(message="Product category is required.")]
-    )
+# class ProductForm(FlaskForm):
+#     # Category Dropdown for selecting product category
+#     product_category = SelectField(
+#         "Product Category", 
+#         coerce=int,  # coerce values to integers
+#         validators=[DataRequired(message="Product category is required.")]
+#     )
 
-    product_name = StringField("Product Name", 
-        validators=[DataRequired(message="Product name is required.")]
-    )
-    product_description = TextAreaField("Description", 
-        validators=[Length(max=1000, message="Description cannot exceed 1000 characters.")]
-    )
-    cost_price = FloatField("Cost Price", default=0,
-        validators=[DataRequired(message="Cost price is required.")]
-    )
-    selling_price = FloatField("Selling Price", default=0,
-        validators=[DataRequired(message="Selling price is required.")]
-    )
-    # discount = FloatField("Discount")
-    discount = FloatField("Discount", default=0)
-    stock_quantity = IntegerField("Stock Quantity", 
-        validators=[DataRequired(message="Stock quantity is required.")]
-    )
-    product_image = FileField("Upload Product Image")
+#     product_name = StringField("Product Name", 
+#         validators=[DataRequired(message="Product name is required.")]
+#     )
+#     product_description = TextAreaField("Description", 
+#         validators=[Length(max=1000, message="Description cannot exceed 1000 characters.")]
+#     )
+#     cost_price = FloatField("Cost Price", default=0,
+#     validators=[
+#         DataRequired(message="Cost price is required."),
+#         NumberRange(min=0, message="Cost price must be non-negative.")
+#     ])
+#     selling_price = FloatField("Selling Price", default=0,
+#     validators=[
+#         DataRequired(message="Selling price is required."),
+#         NumberRange(min=0, message="Selling price must be non-negative.")
+#     ])
+#     # discount = FloatField("Discount")
+#     discount = FloatField("Discount", default=0,
+#     validators=[
+#         NumberRange(min=0, max=100, message="Discount must be between 0 and 100.")
+#     ])
+
+#     stock_quantity = IntegerField("Stock Quantity", default=1,
+#     validators=[
+#         DataRequired(message="Stock quantity is required."),
+#         NumberRange(min=0, message="Stock quantity must be non-negative.")
+#     ])
+
+#     product_image = FileField("Upload Product Image")
 
     
-    submit = SubmitField("Register Product")
+#     submit = SubmitField("Register Product")
+
+
+
+class ProductForm(FlaskForm):
+    product_category = SelectField(
+        "Product Category",
+        coerce=int,  # FK field as integer
+        validators=[DataRequired(message="Product category is required.")]
+    )
+    supplier = SelectField(
+        "Supplier",
+        coerce=int,
+        validators=[Optional()]  # FK field as nullable
+    )
+    product_name = StringField(
+        "Product Name",
+        validators=[
+            DataRequired(message="Product name is required."),
+            Length(min=3, max=100, message="Product name must be between 3 and 100 characters.")
+        ]
+    )
+    product_description = TextAreaField(
+        "Description",
+        validators=[Optional(), Length(max=1000, message="Description cannot exceed 1000 characters.")]
+    )
+    cost_price = FloatField(
+        "Cost Price",
+        default=0.0, 
+        validators=[
+            NumberRange(min=0, message="Cost price must be non-negative.")
+        ]
+    )
+    selling_price = FloatField(
+        "Selling Price",
+        default=0.0,
+        validators=[
+            NumberRange(min=0, message="Selling price must be non-negative.")
+        ]
+    )
+    discount = FloatField(
+        "Discount",
+        default=0,
+        validators=[
+            NumberRange(min=0, max=100, message="Discount must be between 0 and 100.")
+        ]
+    )
+    stock_quantity = IntegerField(
+        "Stock Quantity",
+        default=1.0,
+        validators=[
+            DataRequired(message="Stock quantity is required."),
+            NumberRange(min=0, message="Stock quantity must be non-negative.")
+        ]
+    )
+    stock_threshold = IntegerField(
+        "Stock Threshold",
+        default=10,
+        validators=[
+            DataRequired(message="Stock threshold is required."),
+            NumberRange(min=1, message="Stock threshold must be at least 1.")
+        ]
+    )
+    product_image = FileField(
+        "Upload Product Image",
+        validators=[
+            Optional(),
+            FileAllowed(["jpg", "jpeg", "png"], "Images only!")
+        ]
+    )
+    submit = SubmitField("Add Product")
+
+
+
+
+
 
 
 

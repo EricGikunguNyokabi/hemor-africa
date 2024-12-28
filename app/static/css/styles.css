@@ -43,7 +43,7 @@
 }
 
 .card-img-top:hover {
-  transform: scale(1.03);
+  transform: scale(1.000003);
   transition: 0.5s ;
 }
 

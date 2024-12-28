@@ -22,15 +22,16 @@ class Product(db.Model):
 
     product_id = db.Column(db.Integer, primary_key=True)
     product_category_id = db.Column(db.Integer, db.ForeignKey('categories.category_id'), nullable=False)  # FK to Category
+    product_category = db.Column(db.String(255), nullable=False)
     supplier_id = db.Column(db.Integer, db.ForeignKey('suppliers.supplier_id'), nullable=True)  # FK to Supplier
     product_name = db.Column(db.String(255), nullable=False)
     product_description = db.Column(db.Text, nullable=True)
-    cost_price = db.Column(db.Float, nullable=False)  # Price purchased from supplier
-    selling_price = db.Column(db.Float, nullable=False)  # Price sold to customer
+    cost_price = db.Column(db.Float, nullable=True)  # Price purchased from supplier
+    selling_price = db.Column(db.Float, nullable=True)  # Price sold to customer
     discount = db.Column(db.Float, default=0.0)  # Any discount on the product
     product_image_path = db.Column(db.String(255), nullable=True)  # Image path
 
-    stock_quantity = db.Column(db.Integer, default=0)
+    stock_quantity = db.Column(db.Integer, default=1)
     stock_threshold = db.Column(db.Integer, default=10)  # Alert threshold for low stock
 
     # Tracking fields

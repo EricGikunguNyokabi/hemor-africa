@@ -2,7 +2,7 @@
 
 from flask import Blueprint, render_template,request,jsonify
 from flask_login import current_user, login_required
-from app.models.product import Product
+from app.models.product import Product,Category
 from app.models.user import User, Employee
 
 main = Blueprint('main', __name__)
@@ -10,8 +10,11 @@ main = Blueprint('main', __name__)
 # Home route: Display all products
 @main.route("/")
 def home():
+    # categories are ordered by their category_id
+    categories = Category.query.order_by(Category.category_id).all()
+
     products = Product.query.all()  # Fetch all products from the database
-    return render_template("home.html", products=products,user=current_user)
+    return render_template("home.html", categories=categories, products=products,user=current_user)
 
 
 # Profile route: View or update user profile

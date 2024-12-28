@@ -6,44 +6,85 @@
 
 {% block content %}
     <div class="container my-5">
-        <h1>Welcome to {{ company_name.replace('Afriqa', 'AfriQa') }}</h1>
+        <!-- <h1>Welcome to {{ company_name.replace('Afriqa', 'AfriQa') }}</h1> -->
 
         
 
         <!-- Products Listing -->
         <div class="container my-4">
-            <h2 class="text-center">Featured Products</h2>
-            <div class="row row-cols-2 row-cols-md-4 g-4">
-                {% if products %}
-                    {% for product in products %}
-                    <div class="col">
-                        <div class="card h-100 shadow-sm">
-                            <img src="{{ url_for('static', filename=product.product_image_path.split('static/', 1)[-1]) }}" 
-                                 class="card-img-top w-100 product-image" 
-                                 alt="{{ product.product_name }}">
-                            <div class="card-body">
-                                <h5 class="card-title" style="font-family: 'Concert One';">{{ product.product_name | capitalize }}</h5>
-                                <p class="text-muted">{{ product.product_description[:50] }}...</p>
-                                <div class="d-flex justify-content-between">
-                                    <p class="card-text" style="font-family: kalam;">
-                                        <strong>Price: Ksh {{ "{:,.2f}".format(product.product_cost) }}</strong>
-                                    </p>
-                                    <a href="{{ url_for('ecommerce.single_product_detail', product_id=product.product_id) }}" 
-                                       class="btn btn-outline-primary btn-sm">View Details</a>
-                                </div>
+
+            <div class="row row-cols-3 row-cols-md-3 g-4">
+                {% for category in categories %}
+                <div class="col">
+                    <!-- Card Container -->
+                    <a href="{{ url_for('category.all_categories', category_id=category.category_id) }}" class="text-decoration-none text-dark">
+                        <div class="card h-100 shadow-sm rounded-5">
+                            <!-- Image Section -->
+                            <img src="{{ url_for('static', filename=category.category_image_path.split('static/', 1)[-1]) }}" 
+                                 alt="{{ category.category_name }}" 
+                                 class="card-img-top" 
+                                 >
+        
+                            <!-- Card Body -->
+                            <div class="card-body py-0 d-flex align-items-center justify-content-center text-center text-light hemor-bg-8" 
+                                 style="height: auto; font-family: monospace; font-size: 0.7em;">
+                                <h5 class="card-title fw-bold m-0">{{ category.category_name | upper }}</h5>
                             </div>
                         </div>
-                    </div>
-                    {% endfor %}
-                {% else %}
-                <div class="justify-content-center alert alert-warning text-center" role="alert">
-                    <p>Oops! No products are available now. Check back soon for exciting items!</p>
-                    <p>
-                        <a href="{{ url_for('admin.dashboard')}}">ADMIN DASHBOARD</a>
-                    </p>
+                    </a>
                 </div>
-                {% endif %}
+                {% endfor %}
             </div>
+
+
+            <div class="row row-cols-2 row-cols-md-5 g-2">
+                {% for product in products.items %}
+                <div class="col">
+                    <div class="card border-1" style="padding: 5px;">
+                        <a href="{{ url_for('ecommerce.single_product_detail', product_id=product.product_id) }}" 
+                           style="text-decoration: none; color: inherit;">
+        
+                           {% if product.product_image_path %}
+                                <img src="{{ url_for('static', filename=product.product_image_path) }}" class="w-100" 
+                                alt="{{ product.product_name }}" 
+                                style="min-height: 165px; max-height: 165px;">
+                            {% else %}
+                                <span>No Image</span>
+                            {% endif %}
+                        </a>
+        
+                        <div class="align-items-center mt-0">
+                            <h5 class="m-0 text-center flex-grow-1" 
+                                style="font-family: monospace; font-size: 0.9em; font-weight: 800;">
+                                {{ product.product_name | title }}
+                            </h5>
+                        </div>
+        
+                        <div class="d-flex justify-content-between align-items-center mt-0">
+                            
+                            <!-- Product Cost -->
+                            <h5 class="m-0 text-center flex-grow-1" 
+                                style="font-family: monospace; font-size: 0.7em; font-weight: 300; color: rgba(0,0,0,.7);">
+                                Ksh {{ "{:,.0f}".format(product.product_cost) }}
+                                </h5>
+        
+                            <!-- Add to cart Button / Shopping cart Icon -->
+                            <button class="btn btn-outline-primary update-quantity-btn p-1" 
+                            data-product-id="{{ product.product_id }}" 
+                            data-action="increment"
+                            style="display: inline-flex; align-items: center; justify-content: center; background: none; border: none;">
+                            <i id="icon-{{ product.product_id }}" class="bi bi-cart-plus" 
+                            style="font-size: 1.5em; color: rgba(128, 0, 128, 0.8);" 
+                            onclick="changeToPlaced('{{ product.product_id }}')"></i>
+                            </button>
+                            
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            
         </div>
     </div>
 {% endblock %}

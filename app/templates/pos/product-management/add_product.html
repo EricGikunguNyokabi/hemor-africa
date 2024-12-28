@@ -12,6 +12,20 @@
                 <h4>Add Product Details</h4>
             </div>
             <div class="card-body">
+                <!-- Flash Messages -->
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        <div class="alert alert-dismissible fade show" role="alert">
+                            {% for category, message in messages %}
+                                <div class="alert-{{ category }}">
+                                    {{ message }}
+                                </div>
+                            {% endfor %}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endif %}
+                {% endwith %}
+
                 <form method="POST" enctype="multipart/form-data">
                     {{ form.hidden_tag() }}
 
@@ -49,6 +63,22 @@
                             {% endfor %}
                         </select>
                         {% for error in form.product_category.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Supplier -->
+                    <div class="form-group mb-3">
+                        <label for="supplier" class="form-label">
+                            <i class="bi bi-person-circle"></i> Supplier
+                        </label>
+                        <select name="supplier" id="supplier" class="form-control" required>
+                            <option value="" selected>Select Supplier</option>
+                            {% for supplier in suppliers %}
+                                <option value="{{ supplier.supplier_id }}">{{ supplier.supplier_name }}</option>
+                            {% endfor %}
+                        </select>
+                        {% for error in form.supplier.errors %}
                             <div class="text-danger">{{ error }}</div>
                         {% endfor %}
                     </div>
@@ -102,10 +132,65 @@
                         <label for="stock_quantity" class="form-label">
                             <i class="bi bi-boxes"></i> Stock Quantity
                         </label>
-                        {{ form.stock_quantity(class="form-control") }}
+                        {{ form.stock_quantity(class="form-control", value=form.stock_quantity.data if form.stock_quantity.data else 1) }}
                         {% for error in form.stock_quantity.errors %}
                             <div class="text-danger">{{ error }}</div>
                         {% endfor %}
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="stock_threshold" class="form-label">
+                            <i class="bi bi-exclamation-triangle"></i> Stock Threshold
+                        </label>
+                        {{ form.stock_threshold(class="form-control", value=form.stock_threshold.data if form.stock_threshold.data else 10) }}
+                        {% for error in form.stock_threshold.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    
+
+                    <!-- Product Barcode -->
+                    <!-- <div class="form-group mb-3">
+                        <label for="product_barcode" class="form-label">
+                            <i class="bi bi-upc-scan"></i> Product Barcode
+                        </label>
+                        {#{ form.product_barcode(class="form-control") }#}
+                        {#% for error in form.product_barcode.errors %#}
+                            <div class="text-danger">{#{ error }#}</div>
+                        {#% endfor %#}
+                    </div> -->
+
+                    <!-- Unit of Measure -->
+                    <!-- <div class="form-group mb-3">
+                        <label for="unit_of_measure" class="form-label">
+                            <i class="bi bi-grid"></i> Unit of Measure
+                        </label>
+                        {#{ form.unit_of_measure(class="form-control") }#}
+                        {#% for error in form.unit_of_measure.errors %#}
+                            <div class="text-danger">{#{ error }#}</div>
+                        {#% endfor %#}
+                    </div> -->
+
+                    <!-- Tax Percentage -->
+                    <!-- <div class="form-group mb-3">
+                        <label for="tax_percentage" class="form-label">
+                            <i class="bi bi-piggy-bank"></i> Tax Percentage
+                        </label>
+                        {#{ form.tax_percentage(class="form-control", value=form.tax_percentage.data if form.tax_percentage.data else 0) }#}
+                        {#% for error in form.tax_percentage.errors %#}
+                            <div class="text-danger">{#{ error }#}</div>
+                        {#% endfor %#}
+                    </div> -->
+
+                    <!-- Product Status -->
+                    <div class="form-group mb-3">
+                        <label for="status" class="form-label">
+                            <i class="bi bi-toggle-on"></i> Product Status
+                        </label>
+                        <select name="status" id="status" class="form-control" required>
+                            <option value="active" selected>Active</option>
+                            <option value="inactive">Inactive</option>
+                        </select>
                     </div>
 
                     <!-- Submit Button -->

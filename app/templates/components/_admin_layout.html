@@ -9,24 +9,13 @@
             </button>
             <div class="collapse navbar-collapse text-danger" id="navbarNav">
                 <ul class="navbar-nav text-danger">
-                    <!-- Admin Dashboard Link
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('admin.dashboard') }}">
-                            <i class="bi bi-house-door"></i> Admin Dashboard
-                        </a>
-                    </li> -->
+
                     <!-- View All Categories Link -->
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('category.all_categories') }}">
                             <i class="bi bi-list"></i> All Categories
                         </a>
                     </li>
-                    <!-- Add New Category Link
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('category.new_category') }}">
-                            <i class="bi bi-plus-circle"></i> Add New Category
-                        </a>
-                    </li> -->
                     
                     <!-- View All Products Link -->
                     <li class="nav-item">
@@ -34,30 +23,14 @@
                             <i class="bi bi-box"></i> All Products
                         </a>
                     </li>
-                    <!-- Add New Product Link -->
-                    <!-- <li class="nav-item">
-                        <a class="nav-link" href="{#{ url_for('products.add_product_details') }#}">
-                            <i class="bi bi-cart-plus"></i> Add New Product
-                        </a>
-                    </li> -->
+
                     <!-- Manage Orders Link -->
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('admin.dashboard') }}">
                             <i class="bi bi-cart"></i> Manage Orders
                         </a>
                     </li>
-                    <!-- Admin Login Link -->
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('auth.login') }}">
-                            <i class="bi bi-box-arrow-in-right"></i> Admin Login
-                        </a>
-                    </li>
-                    <!-- Admin Logout Link -->
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('auth.logout') }}">
-                            <i class="bi bi-box-arrow-right"></i> Admin Logout
-                        </a>
-                    </li>
+                    
                     <!-- Register New Admin Link -->
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('auth.register') }}">
@@ -70,6 +43,14 @@
                             <i class="bi bi-person"></i> Register Employee
                         </a>
                     </li>
+
+                    <!-- Admin Logout Link -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('auth.logout') }}">
+                            <i class="bi bi-box-arrow-right"></i> Admin Logout
+                        </a>
+                    </li>
+
                 </ul>
             </div>
         </div>

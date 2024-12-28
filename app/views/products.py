@@ -3,7 +3,9 @@ from flask import Blueprint, render_template, request, flash, current_app, jsoni
 from werkzeug.utils import secure_filename
 from app.models.product import Product, Category
 from app.forms.product import ProductForm
+from app.forms.supplier import SupplierForm
 from app.models.user import User, Employee
+from app.models.supplier import Supplier
 from app import db
 
 products = Blueprint("products", __name__)
@@ -14,49 +16,82 @@ products = Blueprint("products", __name__)
 def all_products():
     products = Product.query.all()  # Fetch all products
     categories = Category.query.all()  # Fetch all categories for name mapping
-    return render_template('pos/product-management/all_products.html', products=products, categories=categories)
+    form = ProductForm()  # Create an instance of the form
+    return render_template('pos/product-management/all_products.html', products=products, categories=categories, form=form)
 
 
 @products.route("/product/add-product", methods=["POST", "GET"])
 def add_product():
-    form = ProductForm()  # Create an instance of the form
-    categories = Category.query.all()  # Get all categories for the dropdown
-
-    # Populate the SelectField with category choices (category_name as the label, category_id as the value)
+    form = ProductForm()
+    categories = Category.query.all()
     form.product_category.choices = [(category.category_id, category.category_name) for category in categories]
+
+    # Fetch suppliers and add the default supplier as the first choice
+    suppliers = Supplier.query.all()
+    form.supplier.choices = [(1, "Kibe (Default)")] + [
+        (supplier.supplier_id, supplier.supplier_name) for supplier in suppliers
+    ]
 
     if form.validate_on_submit():
         try:
             # Retrieve form data
+            product_category = form.product_category.data
             product_name = form.product_name.data
             product_description = form.product_description.data
             product_cost = form.cost_price.data
             product_selling_price = form.selling_price.data
             product_discount = form.discount.data
             product_stock_quantity = form.stock_quantity.data
+            stock_threshold = form.stock_threshold.data
             product_image = form.product_image.data
 
-            # Secure file upload
-            image_filename = secure_filename(product_image.filename)
-            upload_folder = current_app.config["ECOMMERCE_PRODUCT_UPLOAD_FOLDER"]
-            os.makedirs(upload_folder, exist_ok=True)
-            image_path = os.path.join(upload_folder, image_filename)
-            product_image.save(image_path)
+    
 
-            # Retrieve the selected category based on the category_id from the form
+            # Secure file upload or handle default image
+            if product_image:
+                image_filename = secure_filename(product_image.filename)
+                upload_folder = current_app.config["ECOMMERCE_PRODUCT_UPLOAD_FOLDER"]
+                os.makedirs(upload_folder, exist_ok=True)
+                image_path = os.path.join(upload_folder, image_filename)
+                product_image.save(image_path)
+                image_path_db = f"app/static/images/ecommerce/products/{image_filename}"
+            else:
+                image_path_db = "images/ecommerce/products/default.jpg"
+
+            # Retrieve selected category
+            # map category according to selection
             product_category_id = form.product_category.data
-            category = Category.query.get(product_category_id)  # Get category by ID
+            category = Category.query.get(product_category_id)
+            if not category:
+                flash("Invalid product category selected.", "danger")
+                return render_template("pos/product-management/add_product.html", form=form, categories=categories)
 
-            # Create and save the new product with the selected category
+            # Assign supplier or fallback to default supplier
+            product_supplier_id = form.supplier.data or 1  # Fallback to default supplier ID
+            supplier = Supplier.query.get(product_supplier_id)
+            if not supplier:
+                flash("Default supplier is not properly configured in the database.", "danger")
+                return render_template("pos/product-management/add_product.html", form=form, categories=categories)
+
+            # Ensure unique product name
+            if Product.query.filter_by(product_name=product_name).first():
+                flash(f"Product with name '{product_name}' already exists.", "danger")
+                return render_template("pos/product-management/add_product.html", form=form, categories=categories)
+
+            # Create new product
             new_product = Product(
+                product_category_id=product_category_id,
+                product_category=category,
+                supplier=supplier,
                 product_name=product_name,
                 product_description=product_description,
                 cost_price=product_cost,
                 selling_price=product_selling_price,
                 discount=product_discount,
                 stock_quantity=product_stock_quantity,
-                product_image_path=f"images/ecommerce/products/{image_filename}",
-                product_category=category
+                stock_threshold=stock_threshold,
+                product_image_path=image_path_db
+                
             )
 
             db.session.add(new_product)
@@ -67,10 +102,13 @@ def add_product():
 
         except Exception as e:
             db.session.rollback()
-            flash(f"An error occurred: {str(e)}", "danger")
-            return render_template("pos/product-management/add_product.html", form=form, categories=categories)
+            import logging
+            logging.error(f"An error occurred while adding a product: {str(e)}")
+            flash("An unexpected error occurred. Please try again later.", "danger")
 
-    return render_template("pos/product-management/add_product.html", form=form, categories=categories)
+    return render_template("pos/product-management/add_product.html", form=form, categories=categories, suppliers=suppliers)
+
+
 
 
 
@@ -111,14 +149,19 @@ def delete_product(product_id):
     product = Product.query.get_or_404(product_id)  # Fetch product or return 404
 
     try:
+        # Delete the image file if it exists
+        image_path = os.path.join(current_app.root_path, product.product_image_path)
+        if os.path.exists(image_path):
+            os.remove(image_path)
+
         db.session.delete(product)
         db.session.commit()  # Save deletion to the database
-        flash('Product deleted successfully!', 'success')
+        flash(f"Category '{product.product_name}' deleted successfully!", "success")
     except Exception as e:
         db.session.rollback()  # Rollback in case of error
         flash(f'Error deleting product: {e}', 'danger')
 
-    return redirect(url_for('all_products'))  # Redirect to the all products page
+    return redirect(url_for("products.all_products"))  # Redirect to the all products page
 
 
 
