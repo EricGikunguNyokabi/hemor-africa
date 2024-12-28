@@ -8,11 +8,11 @@ from app.models.user import User, Employee
 from app.models.supplier import Supplier
 from app import db
 
-products = Blueprint("products", __name__)
+products = Blueprint("products", __name__,url_prefix="/hemor-afriqa/product/")
 
 
 
-@products.route('/products')
+@products.route("/products")
 def all_products():
     products = Product.query.all()  # Fetch all products
     categories = Category.query.all()  # Fetch all categories for name mapping
@@ -20,7 +20,7 @@ def all_products():
     return render_template('pos/product-management/all_products.html', products=products, categories=categories, form=form)
 
 
-@products.route("/product/add-product", methods=["POST", "GET"])
+@products.route("/add-product", methods=["POST", "GET"])
 def add_product():
     form = ProductForm()
     categories = Category.query.all()
@@ -110,37 +110,55 @@ def add_product():
 
 
 
-
-
-@products.route('/product/edit/<int:product_id>', methods=['GET', 'POST'])
+# EDIT CATEGORY
+@products.route("/edit/<int:product_id>", methods=["POST", "GET"])
 def edit_product(product_id):
-    product = Product.query.get_or_404(product_id)  # Fetch product or return 404 if not found
+    # Get the product from the database
+    product = Product.query.get_or_404(product_id)
+    categories = Category.query.all()  # Fetch all categories for the dropdown
+    suppliers = Supplier.query.all()  # Fetch all suppliers for the dropdown
+    form = ProductForm(obj=product)  # Populate the form with current product data
 
-    if request.method == 'POST':
-        # Update product fields from the form submission
-        product.name = request.form.get('product_name')
-        product.category_id = request.form.get('product_category')
-        product.description = request.form.get('product_description')
-        product.cost_price = request.form.get('cost_price', type=float)
-        product.selling_price = request.form.get('selling_price', type=float)
-        product.discount = request.form.get('discount', type=float)
-        product.stock_quantity = request.form.get('stock_quantity', type=int)
+    # Set the choices for categories and suppliers
+    form.product_category.choices = [(category.category_id, category.category_name) for category in categories]
+    form.supplier.choices = [(supplier.supplier_id, supplier.supplier_name) for supplier in suppliers]
 
-        # Check for image update
-        if 'product_image' in request.files:
-            image_file = request.files['product_image']
-            if image_file.filename:  # Check if a new image is uploaded
-                # (Save image logic: upload to a server, cloud storage, etc.)
-                product.image_url = f"/static/images/{image_file.filename}"
-                image_file.save(f"static/images/{image_file.filename}")
+    if form.validate_on_submit():
+        try:
+            # Update the product details
+            product.product_name = form.product_name.data
+            product.product_description = form.product_description.data
+            product.cost_price = form.cost_price.data
+            product.selling_price = form.selling_price.data
+            product.discount = form.discount.data
+            product.stock_quantity = form.stock_quantity.data
+            product.stock_threshold = form.stock_threshold.data
+            product.product_category_id = form.product_category.data
+            product.supplier_id = form.supplier.data
 
-        db.session.commit()  # Save updates to the database
-        flash('Product updated successfully!', 'success')
-        return redirect(url_for('all_products'))  # Redirect to the all products page
+            # Handle image upload if a new image is provided
+            if form.product_image.data:
+                product_image = form.product_image.data
+                image_filename = secure_filename(product_image.filename)
+                upload_folder = current_app.config["ECOMMERCE_PRODUCT_UPLOAD_FOLDER"]
+                os.makedirs(upload_folder, exist_ok=True)
+                image_path = os.path.join(upload_folder, image_filename)
+                product_image.save(image_path)
 
-    # Pre-fill the edit form with product data
-    categories = Category.query.all()  # Assuming you have a Category model for the dropdown
-    return render_template("pos/product-management/edit_product.html", product=product, categories=categories)
+                # Update the image path in the database
+                product.product_image_path = f"app/static/images/ecommerce/products/{image_filename}"
+
+            # Commit the changes to the database
+            db.session.commit()
+
+            flash(f"Product '{product.product_name}' updated successfully!", "success")
+            return redirect(url_for("products.all_products"))
+
+        except Exception as e:
+            db.session.rollback()
+            flash(f"An error occurred while updating the product: {str(e)}", "danger")
+
+    return render_template("pos/product-management/edit_product.html", form=form, product=product, categories=categories, suppliers=suppliers)
 
 
 

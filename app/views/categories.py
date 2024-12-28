@@ -20,12 +20,14 @@ from app.forms.supplier import SupplierForm
 # Blueprint initializtion
 category = Blueprint("category", __name__,url_prefix="/admin/category")
 
+
 # ALL CATEGORY AVAILABLE 
 @category.route("/categories", methods=["GET"])
 def all_categories():
     categories = Category.query.all()
     form = CategoryForm()  # Create an instance of the form
     return render_template("pos/category/all_categories.html", categories=categories, form=form)
+
 
 # ADD NEW CATEGORY
 @category.route("/new", methods=["POST", "GET"])
@@ -66,38 +68,6 @@ def new_category():
 
 
 # EDIT CATEGORY
-# @category.route("/edit/<int:category_id>", methods=["POST", "GET"])
-# def edit_category(category_id):
-#     category = Category.query.get_or_404(category_id)  # Fetch category by ID or return 404
-#     form = CategoryForm(obj=category)  # Pre-fill form with current category values :obj=category: Automatically pre-fills the form with the category's current data using Flask-WTF's obj parameter.
-    
-#     if form.validate_on_submit():
-#         try:
-#             # Update category with new data from the form
-#             category.category_name = form.category_name.data
-#             category.category_description = form.category_description.data
-            
-#             # Handle image upload if a new file is provided
-#             if form.category_image.data:
-#                 category_image = form.category_image.data
-#                 image_filename = secure_filename(category_image.filename)
-#                 upload_folder = current_app.config.get("ECOMMERCE_CATEGORY_UPLOAD_FOLDER", "static/uploads/categories")
-#                 os.makedirs(upload_folder, exist_ok=True)
-#                 image_path = os.path.join(upload_folder, image_filename)
-#                 category_image.save(image_path)
-#                 category.category_image_path = f"app/static/images/ecommerce/category/{image_filename}"
-
-#             # Save changes to the database
-#             db.session.commit()
-#             flash(f"Category '{category.category_name}' updated successfully!", "success")
-#             return redirect(url_for("category.all_categories"))  # Redirect to category list
-
-#         except Exception as e:
-#             db.session.rollback()
-#             flash(f"An error occurred while updating the category: {str(e)}", "danger")
-#             return render_template("pos/category/edit_category.html", form=form, category=category)
-
-#     return render_template("pos/category/edit_category.html", form=form, category=category)
 @category.route("/admin/category/edit/<int:category_id>", methods=["POST", "GET"])
 def edit_category(category_id):
     # Get category from database
@@ -156,20 +126,3 @@ def delete_category(category_id):
         flash(f"An error occurred while deleting the category: {str(e)}", "danger")
 
     return redirect(url_for("category.all_categories"))  # This ensures that after the deletion, the user is redirected to the appropriate page, maintaining a smooth user experience. Overall, your implementation is effective and follows best practices for handling category management in a Flask application. If you have any further questions or need additional features, feel free to ask!
-
-
-
-# Route to display products by category
-@category.route("/<int:category_id>")
-def category_products(category_id):
-    # Query category details
-    category = Category.query.filter_by(category_id=category_id).first_or_404()
-    
-    # Query products associated with this category
-    products = Product.query.filter_by(product_category_id=category_id).all()
-
-    return render_template(
-        "product/category_products.html",
-        category=category,
-        products=products
-    )
