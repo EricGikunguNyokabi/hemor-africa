@@ -3,7 +3,7 @@ from wtforms import StringField, FloatField, IntegerField, TextAreaField, FileFi
 from wtforms.validators import DataRequired, Length, Optional
 
 
-class ProductsCategoryForm(FlaskForm):
+class CategoryForm(FlaskForm):
     category_name = StringField("Category Name",
         validators=[
             DataRequired(message="Category name is required."),

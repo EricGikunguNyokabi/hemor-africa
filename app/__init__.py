@@ -47,17 +47,20 @@ def create_app():
     bcrypt.init_app(app)
     csrf.init_app(app)
 
+
+
     login_manager.login_view = "auth.login"
 
     @login_manager.user_loader
     def load_user(user_id):
         from app.models.user import User
-        from app.models.employee import Employee
+        from app.models.user import Employee
         user = User.query.get(int(user_id))
         return user or Employee.query.get(int(user_id))
 
     # Register Blueprints
     from app.views import main as main_blueprint
+    from app.views.admin import admin as admin_blueprint
     from app.views.auth import auth as auth_blueprint
     from app.views.employees import employee as employee_blueprint
     from app.views.categories import category as category_blueprint
@@ -65,6 +68,7 @@ def create_app():
     from app.views.suppliers import supplier as supplier_blueprint
 
     app.register_blueprint(main_blueprint)
+    app.register_blueprint(admin_blueprint)
     app.register_blueprint(auth_blueprint, url_prefix="/auth")
     app.register_blueprint(employee_blueprint, url_prefix="/employee")
     app.register_blueprint(category_blueprint, url_prefix="/category")

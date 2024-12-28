@@ -1,7 +1,9 @@
 from flask import Blueprint, render_template
 
-admin = Blueprint("admin", __name__,url_prefix="/adm")
+from app.models.user import User, Employee
+
+admin = Blueprint("admin", __name__,url_prefix="/adm/hemor-afriqa")
 
 @admin.route("/dashboard")
-def admin_dashboard():
+def dashboard():
     return render_template("admin/dashboard.html")

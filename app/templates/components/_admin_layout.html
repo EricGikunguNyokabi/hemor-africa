@@ -1,0 +1,84 @@
+<div class="container mt-4">
+    <!-- Navbar for Admin Dashboard -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{ url_for('admin.dashboard') }}">Admin Dashboard</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse text-danger" id="navbarNav">
+                <ul class="navbar-nav text-danger">
+                    <!-- Admin Dashboard Link -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('admin.dashboard') }}">
+                            <i class="bi bi-house-door"></i> Admin Dashboard
+                        </a>
+                    </li>
+                    <!-- View All Categories Link -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('category.all_categories') }}">
+                            <i class="bi bi-list"></i> All Categories
+                        </a>
+                    </li>
+                    <!-- Add New Category Link
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('category.new_category') }}">
+                            <i class="bi bi-plus-circle"></i> Add New Category
+                        </a>
+                    </li> -->
+                    <!-- Add New Product Link -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('products.add_product_details') }}">
+                            <i class="bi bi-cart-plus"></i> Add New Product
+                        </a>
+                    </li>
+                    <!-- View All Products Link -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('products.all_products') }}">
+                            <i class="bi bi-box"></i> View Products
+                        </a>
+                    </li>
+                    <!-- Manage Orders Link -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('admin.dashboard') }}">
+                            <i class="bi bi-cart"></i> Manage Orders
+                        </a>
+                    </li>
+                    <!-- Admin Login Link -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('auth.login') }}">
+                            <i class="bi bi-box-arrow-in-right"></i> Admin Login
+                        </a>
+                    </li>
+                    <!-- Admin Logout Link -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('auth.logout') }}">
+                            <i class="bi bi-box-arrow-right"></i> Admin Logout
+                        </a>
+                    </li>
+                    <!-- Register New Admin Link -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('auth.register') }}">
+                            <i class="bi bi-person-plus"></i> Register Admin
+                        </a>
+                    </li>
+                    <!-- Register New Employee Link -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('employee.register') }}">
+                            <i class="bi bi-person"></i> Register Employee
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <div class="row">
+        <div class="col-lg-12">
+            <!-- Dynamic Content for specific actions (e.g., Product Management, Order Management) -->
+            {% block admin_dashboard_content %}
+            {% endblock %}
+        </div>
+    </div>
+</div>

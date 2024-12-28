@@ -3,14 +3,17 @@ from flask import Blueprint, render_template, request, flash, current_app, jsoni
 from werkzeug.utils import secure_filename
 from app.models.product import Product
 from app.forms.product import ProductForm
+from app.models.user import User, Employee
 from app import db
 
 products = Blueprint("products", __name__)
+
 
 @products.route('/')
 def home():
     products = Product.query.all()  # Fetch all products from the database
     return render_template('home.html', products=products)
+
 
 @products.route('/products')
 def all_products():

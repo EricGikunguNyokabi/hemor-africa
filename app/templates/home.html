@@ -8,21 +8,7 @@
     <div class="container my-5">
         <h1>Welcome to {{ company_name.replace('Afriqa', 'AfriQa') }}</h1>
 
-        <!-- User/Employee Details -->
-        {% if user %}
-        <div class="alert alert-success">
-            <p><strong>User ID:</strong> {{ user.user_id }}</p>
-            <p><strong>Name:</strong> {{ user.first_name }} {{ user.last_name }}</p>
-        </div>
-        {% endif %}
-
-        {% if employee %}
-        <div class="alert alert-primary">
-            <p><strong>Employee ID:</strong> {{ employee.employee_id }}</p>
-            <p><strong>Name:</strong> {{ employee.first_name }}</p>
-            <p><strong>Logins:</strong> {{ employee.login_count }}</p>
-        </div>
-        {% endif %}
+        
 
         <!-- Products Listing -->
         <div class="container my-4">
@@ -50,13 +36,12 @@
                     </div>
                     {% endfor %}
                 {% else %}
-                    <div class="col alert alert-warning text-center" role="alert">
-                        <p>Oops! No products are available now. Check back soon for exciting items!</p>
-
-                        <p>
-                            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Voluptatem ad ducimus, repellendus sapiente molestiae optio, accusamus vel autem laboriosam ab sequi animi, quas laudantium. Ratione quidem nisi quam esse consequuntur, totam quos dolores assumenda itaque impedit soluta, dolorem unde numquam. Alias maiores adipisci saepe dolores eveniet a assumenda necessitatibus facere tempore veniam commodi, doloremque error repellat sint, itaque facilis odit illo. At corporis tenetur repellat sed, cum obcaecati nulla earum rem delectus, maxime excepturi amet! Praesentium, aliquid laboriosam, quasi repudiandae quam molestiae molestias qui inventore consequuntur sapiente est ut asperiores ullam autem quisquam vel reprehenderit. Voluptates ullam voluptatibus deserunt laborum.
-                        </p>
-                    </div>
+                <div class="justify-content-center alert alert-warning text-center" role="alert">
+                    <p>Oops! No products are available now. Check back soon for exciting items!</p>
+                    <p>
+                        <a href="{{ url_for('admin.dashboard')}}">ADMIN DASHBOARD</a>
+                    </p>
+                </div>
                 {% endif %}
             </div>
         </div>

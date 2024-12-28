@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block title %} 
+    {{ company_name.replace('Afriqa', 'AfriQa') }} | Dashboard 
+{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <h1 class="text-center">Dashboard</h1>
+    <p class="text-center text-muted">Welcome to your personalized dashboard. Manage your account and view key information here.</p>
+
+    <!-- User or Employee Information -->
+    <div class="row justify-content-center my-4">
+        {% if user %}
+        <div class="col-md-6">
+            <div class="card border-success shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title text-success">User Information</h5>
+                    <ul class="list-unstyled">
+                        <li><strong>ID:</strong> {{ user.user_id }}</li>
+                        <li><strong>Name:</strong> {{ user.first_name }} {{ user.last_name }}</li>
+                        <li><strong>Email:</strong> {{ user.email }}</li>
+                    </ul>
+                    <a href="{{ url_for('main.dashboard') }}" class="btn btn-outline-success btn-sm mt-3">View Profile</a>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        {% if employee %}
+            {% if employee is iterable %}
+                <h3>All Employees</h3>
+                <ul>
+                    {% for emp in employee %}
+                        <li>{{ emp.first_name }} {{ emp.last_name }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <h3>Current Employee</h3>
+                <div class="col-md-12">
+                    <div class="card border-primary shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title text-primary">Employee Details</h5>
+                            <ul class="list-unstyled">
+                                <li><strong>Employee ID:</strong> {{ employee.employee_id }}</li>
+                                <li><strong>Role:</strong> {{ employee.user_role }}</li>
+                                <li><strong>Status:</strong> {{ employee.employee_status }}</li>
+                                <li><strong>Name:</strong> {{ employee.first_name }} {{ employee.middle_name or '' }} {{ employee.last_name }}</li>
+                                <li><strong>Mobile:</strong> {{ employee.mobile_no }}</li>
+                                <li><strong>Email:</strong> {{ employee.email }}</li>
+                                <li><strong>Department:</strong> {{ employee.department }}</li>
+                                <li><strong>Job Title:</strong> {{ employee.job_title }}</li>
+                                <li><strong>Employment Type:</strong> {{ employee.employment_type }}</li>
+                                <li><strong>Address:</strong> {{ employee.address }}, {{ employee.city }}, {{ employee.country }} - {{ employee.postal_code }}</li>
+                                <li><strong>Shift Start:</strong> {{ employee.shift_start }}</li>
+                                <li><strong>Shift End:</strong> {{ employee.shift_end }}</li>
+                                <li><strong>Ratings:</strong> {{ employee.employee_ratings or 'N/A' }}</li>
+                                <li><strong>Logins:</strong> {{ employee.login_count }}</li>
+                                <li><strong>Last Login:</strong> {{ employee.last_login or 'Never' }}</li>
+                                <li><strong>Created At:</strong> {{ employee.created_at }}</li>
+                                <li><strong>Updated At:</strong> {{ employee.updated_at }}</li>
+                            </ul>
+                            <a href="{#{ url_for('employee.details', employee_id=employee.employee_id) }#}" class="btn btn-outline-primary btn-sm mt-3">
+                                View Full Profile
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        {% endif %}
+
+
+
+        
+
+    </div>
+
+    <!-- Additional Actions -->
+    <div class="my-5 text-center">
+        <a href="{{ url_for('main.dashboard') }}" class="btn btn-primary mx-2">
+            <i class="fas fa-cogs me-2"></i> Account Settings
+        </a>
+        <a href="{{ url_for('auth.logout') }}" class="btn btn-danger mx-2">
+            <i class="fas fa-sign-out-alt me-2"></i> Logout
+        </a>
+    </div>
+
+    <!-- Footer Message -->
+    <div class="text-center text-muted mt-5">
+        <p>You're accessing the {{ company_name.replace('Afriqa', 'AfriQa') }} dashboard. For support, contact us anytime.</p>
+    </div>
+</div>
+{% endblock %}

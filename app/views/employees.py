@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, flash
 from werkzeug.security import generate_password_hash
-from app.models.employee import Employee
+from app.models.user import User, Employee
 from app import db
 from app.forms.auth import EmployeeRegistrationForm  # Import the registration form
 

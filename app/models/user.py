@@ -1,4 +1,5 @@
-from app import db 
+from sqlalchemy.orm import joinedload
+from app import db
 from flask_login import UserMixin
 
 class User(db.Model, UserMixin):
@@ -6,17 +7,19 @@ class User(db.Model, UserMixin):
 
     user_id = db.Column(db.Integer, primary_key=True)
     user_role = db.Column(db.String(50), default="customer")
-    first_name = db.Column(db.String(255), nullable=True) 
+    first_name = db.Column(db.String(255), nullable=True)
     middle_name = db.Column(db.String(255), nullable=True)
-    last_name = db.Column(db.String(255), nullable=True) 
+    last_name = db.Column(db.String(255), nullable=True)
     username = db.Column(db.String(100), unique=True, nullable=True)
     mobile_no = db.Column(db.String(15), nullable=False)
     email = db.Column(db.String(255), unique=True, nullable=True)
     password = db.Column(db.String(255), nullable=False)
-    otp = db.Column(db.String(6), nullable=True)  
-    otp_created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
+    account_status = db.Column(db.String(20), default="active")
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
     updated_at = db.Column(db.DateTime, default=db.func.current_timestamp(), onupdate=db.func.current_timestamp())
+
+    otp = db.Column(db.String(6), nullable=True)  
+    otp_created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
 
     total_purchases = db.Column(db.Float, default=0.0)
     points = db.Column(db.Integer, default=0)
@@ -34,32 +37,40 @@ class User(db.Model, UserMixin):
     last_login = db.Column(db.DateTime, nullable=True)
     login_count = db.Column(db.Integer, default=0)
     last_activity = db.Column(db.DateTime, nullable=True)
-    account_status = db.Column(db.String(20), default="active")
+    
+    # Relationship with Employee
+    employee = db.relationship("Employee", back_populates="user", uselist=False)
 
     def __repr__(self):
-        return f"<User {self.first_name} {self.last_name} ({self.email})>"
+        return f"<User {self.mobile_no}>"
 
     def full_name(self):
         return f"{self.first_name} {self.middle_name or ''} {self.last_name}".strip()
 
-    def add_points(self, points):
-        self.points += points
-
-    def update_total_purchases(self, amount):
-        self.total_purchases += amount
-
-    # Flask-Login compatibility
     def get_id(self):
         return str(self.user_id)
 
     @property
     def is_active(self):
-        return self.account_status == 'active'  # Custom logic for active status
+        return self.account_status == "active"
 
-    @property
-    def is_authenticated(self):
-        return True  # For simplicity, all users are considered authenticated (depends on logic)
+class Employee(db.Model):
+    __tablename__ = "employee"
+    employee_id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
+    user = db.relationship("User", back_populates="employee")
+    employee_status = db.Column(db.String(50), default="active")
+    department = db.Column(db.String(100), nullable=True)
+    job_title = db.Column(db.String(100), nullable=True)
+    shift_start = db.Column(db.Time, nullable=True)
+    shift_end = db.Column(db.Time, nullable=True)
 
-    @property
-    def is_anonymous(self):
-        return False  # For simplicity, all users are considered authenticated
+    def __repr__(self):
+        if self.user:
+            return f"<Employee {self.user.first_name} {self.user.last_name}>"
+        else:
+            return "<Employee No User Associated>"
+
+
+
+
