@@ -2,18 +2,19 @@
     <!-- Navbar for Admin Dashboard -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
+            <!-- Admin Dashboard Link -->
             <a class="navbar-brand" href="{{ url_for('admin.dashboard') }}">Admin Dashboard</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse text-danger" id="navbarNav">
                 <ul class="navbar-nav text-danger">
-                    <!-- Admin Dashboard Link -->
+                    <!-- Admin Dashboard Link
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('admin.dashboard') }}">
                             <i class="bi bi-house-door"></i> Admin Dashboard
                         </a>
-                    </li>
+                    </li> -->
                     <!-- View All Categories Link -->
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('category.all_categories') }}">
@@ -26,18 +27,19 @@
                             <i class="bi bi-plus-circle"></i> Add New Category
                         </a>
                     </li> -->
-                    <!-- Add New Product Link -->
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('products.add_product_details') }}">
-                            <i class="bi bi-cart-plus"></i> Add New Product
-                        </a>
-                    </li>
+                    
                     <!-- View All Products Link -->
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('products.all_products') }}">
-                            <i class="bi bi-box"></i> View Products
+                            <i class="bi bi-box"></i> All Products
                         </a>
                     </li>
+                    <!-- Add New Product Link -->
+                    <!-- <li class="nav-item">
+                        <a class="nav-link" href="{#{ url_for('products.add_product_details') }#}">
+                            <i class="bi bi-cart-plus"></i> Add New Product
+                        </a>
+                    </li> -->
                     <!-- Manage Orders Link -->
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('admin.dashboard') }}">

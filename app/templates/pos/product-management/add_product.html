@@ -1,63 +1,128 @@
 {% extends "base.html" %}
 
+{% block title %}Add Product - {{ company_name }}{% endblock %}
+
 {% block content %}
-<div class="container mt-5">
-    <h2>Add New Product</h2>
-    <form method="POST" enctype="multipart/form-data">
-        <div class="text">
+    {% include 'components/_admin_layout.html' %}
+    <div class="container mt-5">
+        <h2>Add New Product</h2>
 
+        <div class="card shadow">
+            <div class="card-header text-white text-center" style="background-color: rgba(108, 117, 125, 0.8);">
+                <h4>Add Product Details</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST" enctype="multipart/form-data">
+                    {{ form.hidden_tag() }}
 
-        {{ form.hidden_tag() }}
-        <div class="form-group">
-            {{ form.product_name.label }}<br>
-            {{ form.product_name(class="form-control") }}
-            {% for error in form.product_name.errors %}
-                <span class="text-danger">{{ error }}</span>
-            {% endfor %}
+                    <!-- Product Image -->
+                    <div class="form-group mb-3">
+                        <label for="product_image" class="form-label">
+                            <i class="bi bi-image"></i> Product Image
+                        </label>
+                        {{ form.product_image(class="form-control") }}
+                        {% for error in form.product_image.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Product Name -->
+                    <div class="form-group mb-3">
+                        <label for="product_name" class="form-label">
+                            <i class="bi bi-box"></i> Product Name
+                        </label>
+                        {{ form.product_name(class="form-control") }}
+                        {% for error in form.product_name.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Product Category -->
+                    <div class="form-group mb-3">
+                        <label for="product_category" class="form-label">
+                            <i class="bi bi-tag"></i> Product Category
+                        </label>
+                        <select name="product_category" id="product_category" class="form-control" required>
+                            <option value="">Select a category</option>
+                            {% for category in categories %}
+                                <option value="{{ category.category_id }}">{{ category.category_name }}</option>
+                            {% endfor %}
+                        </select>
+                        {% for error in form.product_category.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Product Description -->
+                    <div class="form-group mb-3">
+                        <label for="product_description" class="form-label">
+                            <i class="bi bi-pencil"></i> Product Description
+                        </label>
+                        {{ form.product_description(class="form-control") }}
+                        {% for error in form.product_description.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Cost Price -->
+                    <div class="form-group mb-3">
+                        <label for="cost_price" class="form-label">
+                            <i class="bi bi-currency-dollar"></i> Cost Price
+                        </label>
+                        {{ form.cost_price(class="form-control", value=form.cost_price.data if form.cost_price.data else 0) }}
+                        {% for error in form.cost_price.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Selling Price -->
+                    <div class="form-group mb-3">
+                        <label for="selling_price" class="form-label">
+                            <i class="bi bi-currency-dollar"></i> Selling Price
+                        </label>
+                        {{ form.selling_price(class="form-control", value=form.selling_price.data if form.selling_price.data else 0) }}
+                        {% for error in form.selling_price.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Discount -->
+                    <div class="form-group mb-3">
+                        <label for="discount" class="form-label">
+                            <i class="bi bi-percent"></i> Discount
+                        </label>
+                        {{ form.discount(class="form-control", value=form.discount.data if form.discount.data else 0) }}
+                        {% for error in form.discount.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Stock Quantity -->
+                    <div class="form-group mb-3">
+                        <label for="stock_quantity" class="form-label">
+                            <i class="bi bi-boxes"></i> Stock Quantity
+                        </label>
+                        {{ form.stock_quantity(class="form-control") }}
+                        {% for error in form.stock_quantity.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary mt-3">
+                            <i class="bi bi-check-circle"></i> {{ form.submit.label }}
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
-        <div class="form-group">
-            {{ form.product_description.label }}<br>
-            {{ form.product_description(class="form-control") }}
-            {% for error in form.product_description.errors %}
-                <span class="text-danger">{{ error }}</span>
-            {% endfor %}
+
+        <!-- Back to Products Button -->
+        <div class="mt-3 text-end">
+            <a href="{{ url_for('products.all_products') }}" class="btn btn-info">
+                <i class="bi bi-arrow-left"></i> Back to All Products
+            </a>
         </div>
-        <div class="form-group">
-            {{ form.cost_price.label }}<br>
-            {{ form.cost_price(class="form-control") }}
-            {% for error in form.cost_price.errors %}
-                <span class="text-danger">{{ error }}</span>
-            {% endfor %}
-        </div>
-        <div class="form-group">
-            {{ form.selling_price.label }}<br>
-            {{ form.selling_price(class="form-control") }}
-            {% for error in form.selling_price.errors %}
-                <span class="text-danger">{{ error }}</span>
-            {% endfor %}
-        </div>
-        <div class="form-group">
-            {{ form.discount.label }}<br>
-            {{ form.discount(class="form-control") }}
-            {% for error in form.discount.errors %}
-                <span class="text-danger">{{ error }}</span>
-            {% endfor %}
-        </div>
-        <div class="form-group">
-            {{ form.stock_quantity.label }}<br>
-            {{ form.stock_quantity(class="form-control") }}
-            {% for error in form.stock_quantity.errors %}
-                <span class="text-danger">{{ error }}</span>
-            {% endfor %}
-        </div>
-        <div class="form-group">
-            {{ form.product_image.label }}<br>
-            {{ form.product_image(class="form-control") }}
-            {% for error in form.product_image.errors %}
-                <span class="text-danger">{{ error }}</span>
-            {% endfor %}
-        </div>
-        <button type="submit" class="btn btn-primary mt-3">{{ form.submit.label }}</button>
-    </form>
-</div>
+    </div>
 {% endblock %}

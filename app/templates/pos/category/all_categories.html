@@ -17,17 +17,38 @@
                 {% for category in categories %}
                 <div class="col">
                     <div class="card h-100 shadow-sm">
+                        <!-- Category Header -->
                         <div class="card-footer text-center text-primary">
                             <h4>Category {{ loop.index }}</h4>
                         </div>
+                        
                         <!-- Category Image -->
                         <img src="{{ url_for('static', filename=category.category_image_path.split('static/', 1)[-1]) }}" 
                              class="card-img-top w-100 category-image" alt="{{ category.category_name }}">
+
+                        <!-- Card Body with Content -->
                         <div class="card-body">
-                            <h5 class="card-title" style="font-family: 'Concert One';">
+                            <h5 class="card-title mb-3" style="font-family: 'Concert One'; font-weight: 900;">
                                 {{ category.category_name | capitalize }}
                             </h5>
-                            <p class="card-text">{{ category.category_description }}</p>
+                            <h6 style="font-family: monospace; font-weight: 700;">Description:</h6>
+                            <p class="card-text mt-0 ms-5">{{ category.category_description }}</p>
+                        </div>
+                        
+                        <!-- Card Footer for Actions -->
+                        <div class="card-footer d-flex justify-content-between">
+
+                            <!-- Edit Button -->
+                            <a href="{{ url_for('category.edit_category', category_id=category.category_id) }}" 
+                               class="btn btn-warning btn-sm">Edit</a>
+
+                            <!-- Delete Button -->
+                            <form method="POST" action="{{ url_for('category.delete_category', category_id=category.category_id) }}" 
+                                onsubmit="return confirm('Are you sure you want to delete this category?');">
+                                {{ form.hidden_tag() }}  <!-- CSRF token -->
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            </form>
+
                         </div>
                     </div>
                 </div>

@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Category - {{ company_name }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="mb-3 text-end">
+                <a href="{{ url_for('category.all_categories') }}" class="btn btn-primary">
+                    &larr; Back to All Categories
+                </a>
+            </div>
+
+            <div class="card shadow">
+                <div class="card-header text-white text-center bg-dark">
+                    <h4>Edit Category</h4>
+                </div>
+                <div class="card-body">
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            <div class="mb-3">
+                                {% for category, message in messages %}
+                                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    {% endwith %}
+
+                    <form method="POST" enctype="multipart/form-data">
+                        {{ form.hidden_tag() }}
+
+                        <div class="form-group mb-3">
+                            <label for="category_name" class="form-label">Category Name</label>
+                            {{ form.category_name(class="form-control", required=True) }}
+                            {% for error in form.category_name.errors %}
+                                <div class="text-danger">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="category_description" class="form-label">Category Description</label>
+                            {{ form.category_description(class="form-control") }}
+                            {% for error in form.category_description.errors %}
+                                <div class="text-danger">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <!-- Current Category Image -->
+                        <div class="mb-3">
+                            <label for="current_product_image" class="form-label">Current Product Image : </label>
+                            {% if category.category_image_path %}
+                                <img src="{{ url_for('static', filename=category.category_image_path.split('static/', 1)[-1]) }}" alt="{{ category.category_name }}" class="img-thumbnail d-block" style="max-width: 150px;">
+                            {% else %}
+                                <span>No Previously Uploaded Image Found</span>
+                            {% endif %}
+                            
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="category_image" class="form-label">Category Image</label>
+                            {{ form.category_image(class="form-control") }}
+                            <small class="form-text text-muted">Leave blank if you don't want to update the image.</small>
+                            {% for error in form.category_image.errors %}
+                                <div class="text-danger">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-success w-100">Save Changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
