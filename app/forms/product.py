@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, FloatField, IntegerField, TextAreaField, FileField, SubmitField, SelectField
+from wtforms import StringField, FloatField, IntegerField, TextAreaField, FileField, SubmitField, SelectField, FieldList
 from wtforms.validators import DataRequired, Length, Optional, NumberRange
 from flask_wtf.file import FileField, FileAllowed
 
@@ -29,47 +29,6 @@ class CategoryForm(FlaskForm):
 
 
 
-
-# class ProductForm(FlaskForm):
-#     # Category Dropdown for selecting product category
-#     product_category = SelectField(
-#         "Product Category", 
-#         coerce=int,  # coerce values to integers
-#         validators=[DataRequired(message="Product category is required.")]
-#     )
-
-#     product_name = StringField("Product Name", 
-#         validators=[DataRequired(message="Product name is required.")]
-#     )
-#     product_description = TextAreaField("Description", 
-#         validators=[Length(max=1000, message="Description cannot exceed 1000 characters.")]
-#     )
-#     cost_price = FloatField("Cost Price", default=0,
-#     validators=[
-#         DataRequired(message="Cost price is required."),
-#         NumberRange(min=0, message="Cost price must be non-negative.")
-#     ])
-#     selling_price = FloatField("Selling Price", default=0,
-#     validators=[
-#         DataRequired(message="Selling price is required."),
-#         NumberRange(min=0, message="Selling price must be non-negative.")
-#     ])
-#     # discount = FloatField("Discount")
-#     discount = FloatField("Discount", default=0,
-#     validators=[
-#         NumberRange(min=0, max=100, message="Discount must be between 0 and 100.")
-#     ])
-
-#     stock_quantity = IntegerField("Stock Quantity", default=1,
-#     validators=[
-#         DataRequired(message="Stock quantity is required."),
-#         NumberRange(min=0, message="Stock quantity must be non-negative.")
-#     ])
-
-#     product_image = FileField("Upload Product Image")
-
-    
-#     submit = SubmitField("Register Product")
 
 
 
@@ -132,17 +91,20 @@ class ProductForm(FlaskForm):
             NumberRange(min=1, message="Stock threshold must be at least 1.")
         ]
     )
-    product_image = FileField(
-        "Upload Product Image",
+
+    product_images = FieldList(FileField("Upload Product Images (multiple)",
         validators=[
-            Optional(),
-            FileAllowed(["jpg", "jpeg", "png"], "Images only!")
-        ]
+            Optional()        ]
+    ), min_entries=1, max_entries=50)  # Adjust min and max as needed
+
+    status = SelectField(
+        "Product Status",
+        choices=[("active", "Active"), ("inactive", "Inactive")],
+        default="active",  # Set a default value if needed
+        validators=[DataRequired(message="Product status is required.")]
     )
+
     submit = SubmitField("Add Product")
-
-
-
 
 
 

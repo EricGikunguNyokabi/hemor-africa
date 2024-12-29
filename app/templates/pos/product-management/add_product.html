@@ -29,17 +29,6 @@
                 <form method="POST" enctype="multipart/form-data">
                     {{ form.hidden_tag() }}
 
-                    <!-- Product Image -->
-                    <div class="form-group mb-3">
-                        <label for="product_image" class="form-label">
-                            <i class="bi bi-image"></i> Product Image
-                        </label>
-                        {{ form.product_image(class="form-control") }}
-                        {% for error in form.product_image.errors %}
-                            <div class="text-danger">{{ error }}</div>
-                        {% endfor %}
-                    </div>
-
                     <!-- Product Name -->
                     <div class="form-group mb-3">
                         <label for="product_name" class="form-label">
@@ -56,12 +45,7 @@
                         <label for="product_category" class="form-label">
                             <i class="bi bi-tag"></i> Product Category
                         </label>
-                        <select name="product_category" id="product_category" class="form-control" required>
-                            <option value="">Select a category</option>
-                            {% for category in categories %}
-                                <option value="{{ category.category_id }}">{{ category.category_name }}</option>
-                            {% endfor %}
-                        </select>
+                        {{ form.product_category(class="form-control") }}
                         {% for error in form.product_category.errors %}
                             <div class="text-danger">{{ error }}</div>
                         {% endfor %}
@@ -72,12 +56,7 @@
                         <label for="supplier" class="form-label">
                             <i class="bi bi-person-circle"></i> Supplier
                         </label>
-                        <select name="supplier" id="supplier" class="form-control" required>
-                            <option value="" selected>Select Supplier</option>
-                            {% for supplier in suppliers %}
-                                <option value="{{ supplier.supplier_id }}">{{ supplier.supplier_name }}</option>
-                            {% endfor %}
-                        </select>
+                        {{ form.supplier(class="form-control") }}
                         {% for error in form.supplier.errors %}
                             <div class="text-danger">{{ error }}</div>
                         {% endfor %}
@@ -130,7 +109,7 @@
                     <!-- Stock Quantity -->
                     <div class="form-group mb-3">
                         <label for="stock_quantity" class="form-label">
-                            <i class="bi bi-boxes"></i> Stock Quantity
+                            <i class ="bi bi-boxes"></i> Stock Quantity
                         </label>
                         {{ form.stock_quantity(class="form-control", value=form.stock_quantity.data if form.stock_quantity.data else 1) }}
                         {% for error in form.stock_quantity.errors %}
@@ -138,6 +117,7 @@
                         {% endfor %}
                     </div>
 
+                    <!-- Stock Threshold -->
                     <div class="form-group mb-3">
                         <label for="stock_threshold" class="form-label">
                             <i class="bi bi-exclamation-triangle"></i> Stock Threshold
@@ -148,6 +128,14 @@
                         {% endfor %}
                     </div>
 
+                    <!-- Product Images -->
+                    <div class="form-group mb-3">
+                        <label for="product_images" class="form-label">
+                            <i class="bi bi-images"></i> Product Images
+                        </label>
+                        <input type="file" name="product_images" id="product_images" class="form-control" accept="image/*" multiple>
+                        <small class="form-text text-muted">You can upload multiple images at once.</small>
+                    </div>
 
                     <!-- Product Status -->
                     <div class="form-group mb-3">
@@ -177,4 +165,11 @@
             </a>
         </div>
     </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // No need for dynamic image field addition since we are using a single input with multiple attribute
+        });
+    </script>
 {% endblock %}

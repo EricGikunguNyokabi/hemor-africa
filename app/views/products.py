@@ -1,23 +1,49 @@
 import os
-from flask import Blueprint, render_template, request, flash, current_app, jsonify, redirect, url_for
+from flask import Blueprint, logging, render_template, request, flash, current_app, jsonify, redirect, url_for
 from werkzeug.utils import secure_filename
-from app.models.product import Product, Category
-from app.forms.product import ProductForm
+from app.models.product import Product, Category, ProductImage, ProductVariant
+from app.forms.product import ProductForm, ProductImageForm, ProductVariantForm
 from app.forms.supplier import SupplierForm
 from app.models.user import User, Employee
 from app.models.supplier import Supplier
 from app import db
 
-products = Blueprint("products", __name__,url_prefix="/hemor-afriqa/product/")
+import logging
+
+logging.basicConfig(level=logging.INFO)  # Set the logging level to INFO
+
+products = Blueprint("products", __name__,url_prefix="/hemor-afriqa/product")
+
+# ==============================================================
+@products.route("/<int:product_id>", methods=['GET'])
+def get_product(product_id):
+    product = Product.query.get_or_404(product_id)
+    product_data = {
+        "product_id": product.product_id,
+        "product_name": product.product_name,
+        "product_description": product.product_description,
+        "images": [image.image_path for image in product.images]
+    }
+    return jsonify(product_data), 200
 
 
 
+
+
+# ===============================================================
 @products.route("/products")
 def all_products():
     products = Product.query.all()  # Fetch all products
     categories = Category.query.all()  # Fetch all categories for name mapping
     form = ProductForm()  # Create an instance of the form
     return render_template('pos/product-management/all_products.html', products=products, categories=categories, form=form)
+
+
+
+
+
+
+# ADDING NEW PRODUCT====================================================
 
 
 @products.route("/add-product", methods=["POST", "GET"])
@@ -35,7 +61,7 @@ def add_product():
     if form.validate_on_submit():
         try:
             # Retrieve form data
-            product_category = form.product_category.data
+            product_category_id = form.product_category.data
             product_name = form.product_name.data
             product_description = form.product_description.data
             product_cost = form.cost_price.data
@@ -43,24 +69,9 @@ def add_product():
             product_discount = form.discount.data
             product_stock_quantity = form.stock_quantity.data
             stock_threshold = form.stock_threshold.data
-            product_image = form.product_image.data
-
-    
-
-            # Secure file upload or handle default image
-            if product_image:
-                image_filename = secure_filename(product_image.filename)
-                upload_folder = current_app.config["ECOMMERCE_PRODUCT_UPLOAD_FOLDER"]
-                os.makedirs(upload_folder, exist_ok=True)
-                image_path = os.path.join(upload_folder, image_filename)
-                product_image.save(image_path)
-                image_path_db = f"app/static/images/ecommerce/products/{image_filename}"
-            else:
-                image_path_db = "images/ecommerce/products/default.jpg"
+            status=form.status.data
 
             # Retrieve selected category
-            # map category according to selection
-            product_category_id = form.product_category.data
             category = Category.query.get(product_category_id)
             if not category:
                 flash("Invalid product category selected.", "danger")
@@ -81,8 +92,8 @@ def add_product():
             # Create new product
             new_product = Product(
                 product_category_id=product_category_id,
-                product_category=category,
-                supplier=supplier,
+                product_category=category.category_name,  # Assuming you want to store the name
+                supplier_id=product_supplier_id,
                 product_name=product_name,
                 product_description=product_description,
                 cost_price=product_cost,
@@ -90,11 +101,36 @@ def add_product():
                 discount=product_discount,
                 stock_quantity=product_stock_quantity,
                 stock_threshold=stock_threshold,
-                product_image_path=image_path_db
-                
+                status=status
             )
 
             db.session.add(new_product)
+            db .session.commit()
+
+            # Handle multiple image uploads
+            # for image in form.product_images.data:
+            if 'product_images' in request.files:
+                images = request.files.getlist('product_images')  # Get the list of uploaded files
+                for image in images:
+                    if image:
+                        image_filename = secure_filename(image.filename)
+                        upload_folder = current_app.config["ECOMMERCE_PRODUCT_UPLOAD_FOLDER"]
+                        os.makedirs(upload_folder, exist_ok=True)
+                        image_path = os.path.join(upload_folder, image_filename)
+                        image.save(image_path)
+                        image_path_db = f"/static/images/ecommerce/products/{image_filename}"
+
+                        # Log the image path
+                        logging.info(f"Saving image: {image_path_db}")
+
+                        # Create a ProductImage instance
+                        product_image = ProductImage(
+                            product_id=new_product.product_id,  # Use the product ID from the newly created product
+                            image_path=image_path_db
+                        )
+                        logging.info(f"ProductImage instance created: {product_image}")
+                        db.session.add(product_image)
+
             db.session.commit()
 
             flash(f"Product '{product_name}' added successfully!", "success")
@@ -102,15 +138,13 @@ def add_product():
 
         except Exception as e:
             db.session.rollback()
-            import logging
             logging.error(f"An error occurred while adding a product: {str(e)}")
             flash("An unexpected error occurred. Please try again later.", "danger")
 
     return render_template("pos/product-management/add_product.html", form=form, categories=categories, suppliers=suppliers)
 
 
-
-# EDIT CATEGORY
+# EDIT CATEGORY ========================================================
 @products.route("/edit/<int:product_id>", methods=["POST", "GET"])
 def edit_product(product_id):
     # Get the product from the database

@@ -1,10 +1,12 @@
+import os
+import logging  # Import logging
 from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate  # type: ignore
 from flask_login import LoginManager
 from flask_bcrypt import Bcrypt
 from flask_wtf.csrf import CSRFProtect
-from flask_cors import CORS  # type: ignore # Import CORS :Enabling supports_credentials in CORS is excellent for applications handling authenticated requests (e.g., cookies for sessions).
+from flask_cors import CORS  # type: ignore Import CORS :Enabling supports_credentials in CORS is excellent for applications handling authenticated requests (e.g., cookies for sessions).
 
 # Initialize extensions
 db = SQLAlchemy()
@@ -28,6 +30,16 @@ def create_app():
 
     # CORS Setup
     CORS(app, supports_credentials=True, origins=["http://localhost:5000"])  # Update for production
+
+    # Logging Configuration
+    logging.basicConfig(
+        level=logging.INFO,  # Set the logging level
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',  # Customize the log format
+        handlers=[
+            logging.StreamHandler(),  # Log to console
+            logging.FileHandler('app.log')  # Log to a file
+        ]
+    )
 
     # Context Processor
     @app.context_processor
