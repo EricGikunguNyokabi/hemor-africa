@@ -6,13 +6,21 @@
 
 {% block content %}
     <div class="container my-5">
-        <!-- <h1>Welcome to {{ company_name.replace('Afriqa', 'AfriQa') }}</h1> -->
 
+        <div class="row justify-content-center">
+            <a href="{{ url_for('products.test_to_display_all_products', product_id=product.product_id) }}" class="btn btn-primary">
+                TEST PAGE
+            </a>
+        </div>
         
+
 
         <!-- Products Listing -->
         <div class="container my-4">
 
+            
+
+            <h2>Categories</h2>
             <div class="row row-cols-3 row-cols-md-4 g-4">
                 {% for category in categories %}
                 <div class="col">
@@ -22,8 +30,7 @@
                             <!-- Image Section -->
                             <img src="{{ url_for('static', filename=category.category_image_path.split('static/', 1)[-1]) }}" 
                                  alt="{{ category.category_name }}" 
-                                 class="card-img-top" 
-                                 >
+                                 class="card-img-top">
         
                             <!-- Card Body -->
                             <div class="card-body py-0 d-flex align-items-center justify-content-center text-center text-dark bg-light" 
@@ -36,7 +43,7 @@
                 {% endfor %}
             </div>
 
-
+            <h2 class="mt-4">Products</h2>
             <div class="row row-cols-2 row-cols-md-5 g-2 mt-3">
                 {% for product in products %}
                 <div class="col">
@@ -44,7 +51,7 @@
                         <a href="{{ url_for('products.single_product_detail', product_id=product.product_id) }}" 
                            style="text-decoration: none; color: inherit;">
                             {% if product.product_image_path %}
-                                <img src="{{ url_for('static', filename=product.product_image_path.split('static/', 1)[-1]) }}" class="card-img-top w-100" 
+                                <img src="{{ url_for('static', filename=product.image_path.split('static/', 1)[-1]) }}" class="card-img-top w-100" 
                                      alt="{{ product.product_name }}"
                                      style="min-height: 250px; max-height: 250px; min-width: 100%;">
                             {% else %}
@@ -63,7 +70,7 @@
                             <!-- Product Cost -->
                             <h5 class="m-0 text-center flex-grow-1" 
                                 style="font-family: monospace; font-size: 0.7em; font-weight: 300; color: rgba(0,0,0,.7);">
-                                Ksh {#{ "{:,.2f}".format(product.product_cost) }#}
+                                Ksh {{ "{:,.2f}".format(product.cost_price) }}
                             </h5>
                 
                             <!-- Add to cart Button / Shopping cart Icon -->
@@ -80,10 +87,9 @@
                 </div>
                 {% endfor %}
             </div>
-
-            
         </div>
     </div>
+
     <script>
         document.querySelectorAll('.update-quantity-btn').forEach(button => {
         button.addEventListener('click', event => {

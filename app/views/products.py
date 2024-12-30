@@ -30,7 +30,7 @@ def get_product(product_id):
 
 
 
-# ===============================================================
+# DISPLAY ALL PRODUCTS ===================================================
 @products.route("/products")
 def all_products():
     products = Product.query.all()  # Fetch all products
@@ -169,18 +169,26 @@ def edit_product(product_id):
             product.stock_threshold = form.stock_threshold.data
             product.product_category_id = form.product_category.data
             product.supplier_id = form.supplier.data
+            product.status = form.status.data  # Update the status
 
-            # Handle image upload if a new image is provided
-            if form.product_image.data:
-                product_image = form.product_image.data
-                image_filename = secure_filename(product_image.filename)
-                upload_folder = current_app.config["ECOMMERCE_PRODUCT_UPLOAD_FOLDER"]
-                os.makedirs(upload_folder, exist_ok=True)
-                image_path = os.path.join(upload_folder, image_filename)
-                product_image.save(image_path)
+            # Handle multiple image uploads
+            if 'product_images' in request.files:
+                images = request.files.getlist('product_images')  # Get the list of uploaded files
+                for image in images:
+                    if image:
+                        image_filename = secure_filename(image.filename)
+                        upload_folder = current_app.config["ECOMMERCE_PRODUCT_UPLOAD_FOLDER"]
+                        os.makedirs(upload_folder, exist_ok=True)
+                        image_path = os.path.join(upload_folder, image_filename)
+                        image.save(image_path)
+                        image_path_db = f"/static/images/ecommerce/products/{image_filename}"
 
-                # Update the image path in the database
-                product.product_image_path = f"app/static/images/ecommerce/products/{image_filename}"
+                        # Create a ProductImage instance
+                        product_image = ProductImage(
+                            product_id=product.product_id,
+                            image_path=image_path_db
+                        )
+                        db.session.add(product_image)
 
             # Commit the changes to the database
             db.session.commit()
@@ -201,17 +209,20 @@ def delete_product(product_id):
     product = Product.query.get_or_404(product_id)  # Fetch product or return 404
 
     try:
-        # Delete the image file if it exists
-        image_path = os.path.join(current_app.root_path, product.product_image_path)
-        if os.path.exists(image_path):
-            os.remove(image_path)
+        # Delete associated images if they exist
+        product_images = ProductImage.query.filter_by(product_id=product_id).all()  # Fetch all images for the product
+        for image in product_images:
+            image_path = os.path.join(current_app.root_path, image.image_path)
+            if os.path.exists(image_path):
+                os.remove(image_path)  # Remove the image file
+            db.session.delete(image)  # Delete the image record from the database
 
-        db.session.delete(product)
+        db.session.delete(product)  # Delete the product
         db.session.commit()  # Save deletion to the database
-        flash(f"Category '{product.product_name}' deleted successfully!", "success")
+        flash(f"Product '{product.product_name}' deleted successfully!", "success")
     except Exception as e:
         db.session.rollback()  # Rollback in case of error
-        flash(f'Error deleting product: {e}', 'danger')
+        flash(f'Error deleting product: {str(e)}', 'danger')
 
     return redirect(url_for("products.all_products"))  # Redirect to the all products page
 
@@ -220,4 +231,36 @@ def delete_product(product_id):
 @products.route('/product/<int:product_id>')
 def single_product_detail(product_id):
     product = Product.query.get_or_404(product_id)  # Fetch product by ID
-    return render_template('product/single_product.html', product=product)
+    images = ProductImage.query.filter_by(product_id=product_id).all()  # Fetch associated images
+    category = Category.query.get(product.product_category_id)  # Fetch the category
+    supplier = Supplier.query.get(product.supplier_id)  # Fetch the supplier
+
+    return render_template(
+        'product/single_product.html',
+        product=product,
+        images=images,
+        category=category,
+        supplier=supplier
+    )
+
+
+@products.route("/test/<int:product_id>")
+def test_to_display_all_products(product_id):
+    # Fetch the specified product by product_id
+    product = Product.query.filter_by(product_id=product_id).first()
+    if not product:
+        return "<h1>Product Not Found</h1>", 404
+
+    # Fetch the product's images
+    images = ProductImage.query.filter_by(product_id=product.product_id).all()
+    
+    # Fetch the product's associated category
+    category = Category.query.filter_by(category_id=product.product_category_id).first()
+
+    return render_template(
+        "test.html",
+        product=product,
+        images=images,
+        category=category
+    )
+

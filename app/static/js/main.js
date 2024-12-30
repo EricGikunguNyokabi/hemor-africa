@@ -52,3 +52,8 @@ function changeToPlaced(productId) {
         iconElement.innerHTML = `<span style="font-size:0.42em;"> Added to cart </span>`;  // Change the text to "Placed"
     }
     }
+
+
+
+
+    
