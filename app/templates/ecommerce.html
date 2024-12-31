@@ -50,12 +50,11 @@
             </div>
         </div>
     {% else %}
-    <h1 class="text-center">ECOMMERCE PRODUCTS</h1>
+    <!-- <h1 class="text-center">ECOMMERCE PRODUCTS</h1> -->
 <div class="row">
     {% for product in products %}
     <div class="col-md-3 col-sm-6">  <!-- Use col-sm-6 for small screens -->
         <div class="card mb-4 d-flex flex-column b-0">
-            <div class="card-text ms-3">Explore variety of {{ product.product_name | title }} </div>
             <div class="card-img-top" style="height: 200px; display: flex; flex-wrap: wrap; justify-content: center; align-items: center;">
                 <div class="row row-cols-2 row-cols-md-2 g-1 mb-3">  <!-- Use Bootstrap's row-cols classes -->
                     {% for image in product.images[:4] %}  <!-- Limit to 4 images -->
@@ -67,10 +66,14 @@
                     {% endfor %}
                 </div>
             </div>
-            <div class="card-body d-flex flex-column mt-2" style="font-family: monospace; font-size: 0.6em;">
+            <div class="card-body d-flex flex-column mt-2" style="font-family: monospace; font-size: 0.8em;">
+                
                 <div class="d-flex justify-content-between align-items-center" style="margin-top: auto;">
-                    <p class="card-text mb-0"><strong>Price:</strong> KES {{ product.selling_price | round(2) }}</p>
-                    <a href="{{ url_for('main.display_products', product_id=product.product_id) }}" style="text-decoration: none;">Discover variety</a>
+                    <h6 class="card-text" style="font-weight: 900;">{{ product.product_name | title }} </h6>
+                    <p class="card-text mb-0">KSh {{ product.selling_price | round(2) }}</p>
+                </div>
+                <div class="d-flex justify-content-end">
+                    <a href="{{ url_for('main.display_products', product_id=product.product_id) }}" style="text-decoration: none; font-weight: 700;">Discover more</a>
                 </div>
             </div>
         </div>
