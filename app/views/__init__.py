@@ -2,7 +2,7 @@
 
 from flask import Blueprint, render_template,request,jsonify
 from flask_login import current_user, login_required
-from app.models.product import Product,Category
+from app.models.product import Product,Category, ProductImage
 from app.models.user import User, Employee
 
 main = Blueprint('main', __name__)
@@ -10,11 +10,84 @@ main = Blueprint('main', __name__)
 # Home route: Display all products
 @main.route("/")
 def home():
-    # categories are ordered by their category_id
-    categories = Category.query.order_by(Category.category_id).all()
+    # Fetch the specified product by product_id
+    product = Product.query.all()
+    if not product:
+        return "<h1>Product Not Found</h1>", 404
 
-    products = Product.query.all()  # Fetch all products from the database
-    return render_template("home.html", categories=categories, products=products,user=current_user)
+    # Fetch the product's images
+    # images = ProductImage.query.filter_by(product_id=product.product_id).all()
+    
+    # Fetch the product's associated category
+    # category = Category.query.filter_by(category_id=product.product_category_id).first()
+
+    return render_template(
+        "home.html",
+        product=product
+        # images=images,
+        # category=category
+    )
+
+
+
+# MAIN E-COMMERCE PAGE ==============================================================================================================
+# @main.route("/products", defaults={'product_id': None})
+# @main.route("/e-commerce")
+# @main.route("/e-commerce/<int:product_id>")
+# def display_products(product_id):
+#     if product_id is not None:
+#         # Fetch the specified product by product_id
+#         product = Product.query.filter_by(product_id=product_id).first()
+#         if not product:
+#             return "<h1>Product Not Found</h1>", 404
+
+#         # Fetch the product's images
+#         images = ProductImage.query.filter_by(product_id=product.product_id).all()
+        
+#         # Fetch the product's associated category
+#         category = Category.query.filter_by(category_id=product.product_category_id).first()
+
+#         return render_template(
+#             "ecommerce.html",
+#             product=product,
+#             images=images,
+#             category=category,
+#             is_single_product=True  # Flag to indicate single product view
+#         )
+#     else:
+#         # Fetch all products if no product_id is provided
+#         products = Product.query.all()  # Fetch all products
+#         categories = Category.query.all()  # Fetch all categories for name mapping
+#         return render_template("ecommerce.html", products=products, categories=categories, is_single_product=False)  # Flag for all products view
+@main.route("/products", defaults={'product_id': None})
+@main.route("/e-commerce")
+@main.route("/e-commerce/<int:product_id>")
+def display_products(product_id):
+    if product_id is not None:
+        # Fetch the specified product by product_id
+        product = Product.query.filter_by(product_id=product_id).first()
+        if not product:
+            return "<h1>Product Not Found</h1>", 404
+
+        # Fetch the product's images, limiting to 4 images
+        images = ProductImage.query.filter_by(product_id=product.product_id).limit(4).all()
+        
+        # Fetch the product's associated category
+        category = Category.query.filter_by(category_id=product.product_category_id).first()
+
+        return render_template(
+            "ecommerce.html",
+            product=product,
+            images=images,
+            category=category,
+            is_single_product=True  # Flag to indicate single product view
+        )
+    else:
+        # Fetch all products if no product_id is provided
+        products = Product.query.all()  # Fetch all products
+        categories = Category.query.all()  # Fetch all categories for name mapping
+        return render_template("ecommerce.html", products=products, categories=categories, is_single_product=False)  # Flag for all products view
+    
 
 
 # Profile route: View or update user profile
